@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="条款05：了解C++默认编写并调用了哪些函数123456789101112131415161718192021222324当写下：class Empty &amp;#123; &amp;#125;;就好像写下这样的代码：class Empty &amp;#123;public:    Empty() &amp;#123; ... &amp;#125;     // default构造函数    Empty(const Empty&amp;amp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构造&#x2F;析构&#x2F;赋值运算">
+<meta property="og:url" content="https://tanswer.github.io/2019/05/04/构造-析构-赋值运算/index.html">
+<meta property="og:site_name" content="Duxm&#39;s Blog">
+<meta property="og:description" content="条款05：了解C++默认编写并调用了哪些函数123456789101112131415161718192021222324当写下：class Empty &amp;#123; &amp;#125;;就好像写下这样的代码：class Empty &amp;#123;public:    Empty() &amp;#123; ... &amp;#125;     // default构造函数    Empty(const Empty&amp;amp">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-04T12:54:34.808Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="构造&#x2F;析构&#x2F;赋值运算">
+<meta name="twitter:description" content="条款05：了解C++默认编写并调用了哪些函数123456789101112131415161718192021222324当写下：class Empty &amp;#123; &amp;#125;;就好像写下这样的代码：class Empty &amp;#123;public:    Empty() &amp;#123; ... &amp;#125;     // default构造函数    Empty(const Empty&amp;amp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tanswer.github.io/2019/05/04/构造-析构-赋值运算/">
+
+
+
+
+
+  <title>构造/析构/赋值运算 | Duxm's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duxm's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tanswer.github.io/2019/05/04/构造-析构-赋值运算/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Duxm">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/WechatIMG1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duxm's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">构造/析构/赋值运算</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-04T20:53:34+08:00">
+                2019-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  3.7k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  14
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="条款05：了解C-默认编写并调用了哪些函数"><a href="#条款05：了解C-默认编写并调用了哪些函数" class="headerlink" title="条款05：了解C++默认编写并调用了哪些函数"></a>条款05：了解C++默认编写并调用了哪些函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">当写下：</span><br><span class="line"></span><br><span class="line">class Empty &#123; &#125;;</span><br><span class="line"></span><br><span class="line">就好像写下这样的代码：</span><br><span class="line"></span><br><span class="line">class Empty &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    Empty() &#123; ... &#125;     // default构造函数</span><br><span class="line"></span><br><span class="line">    Empty(const Empty&amp; rhs) &#123; ... &#125;     // copy构造函数</span><br><span class="line"></span><br><span class="line">    ~Empty() &#123; ... &#125;                                // 析构函数，</span><br><span class="line"></span><br><span class="line">                                                           // 编译器产出的是non-virtual，除非这个类的base class自身声明有virtual</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Empty&amp; operator=(const Empty&amp; rhs) &#123; ... &#125;     // copy assignment 操作符</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>唯有当这些函数被需要，它们才会被编译器创建出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Empty e1;            // default 构造函数</span><br><span class="line"></span><br><span class="line">                            // 析构函数</span><br><span class="line"></span><br><span class="line">Empty e2(e1);      // copy 构造函数</span><br><span class="line"></span><br><span class="line">e2 = e1;               // copy assignment 操作符</span><br></pre></td></tr></table></figure>
+<p>copy 构造函数和 copy assignment 操作符，编译器创建的版本只是单纯地将来源对象的每一个 <code>non-static</code> 成员变量拷贝到目标对象。</p>
+<p>copy assignment 其行为基本与 copy 构造函数如出一辙，但一般而言只有当生出的代码合法且有适当机会证明它有意义，其表现才会如我先前所说。万一两个条件有一个不符合，编译器会拒绝为 class 生出 <code>operator=</code>。</p>
+<p>如果你打算在一个“内含reference成员”的 class 内支持赋值操作，你必须自己定义<code>copy assignment</code> 操作符。</p>
+<p>面对“内含const成员”的 classes ，编译器的反应也是一样，更改 <code>const</code>成员使不合法的。</p>
+<p>还有一种情况：如果某个<code>base classes</code>将<code>copy assignment</code>操作符声明为<code>private</code>，编译器将拒绝为其<code>derived classes</code>生成一个<code>copy assignment</code>操作符。</p>
+<p>小结：</p>
+<ul>
+<li>编译器可以暗自为 class 创建 default 构造函数、copy 构造函数、copy assignment 操作符，以及析构函数。</li>
+</ul>
+<h2 id="条款06：若不想使用编译器自动生成的函数，就该明确拒绝"><a href="#条款06：若不想使用编译器自动生成的函数，就该明确拒绝" class="headerlink" title="条款06：若不想使用编译器自动生成的函数，就该明确拒绝"></a>条款06：若不想使用编译器自动生成的函数，就该明确拒绝</h2><p>怎么可以复制某些先天独一无二的东西呢？我们有时要阻止对象拷贝动作的发生。如果我们不声明对应函数，但是编译器会产出一份<code>copy</code>构造函数和<code>copy assignment</code>操作符。</p>
+<p>一种方法是将<code>copy</code>构造函数或<code>copy assignment</code>操作符声明为<code>private</code>，藉由明确声明一个成员函数，你阻止了编译器暗自创建其专属版本；而令这些函数为 <code>private</code> ，得以成功阻止人们的调用它。但这样 <code>member</code>函数和<code>friend</code>函数还是可以调用<code>private</code>函数，除非只声明，而不定义它们，但是如果不慎调用到它们的话，会导致链接错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class HomeForSale &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    HomeForSale(const HomeForSale&amp;); //只有声明</span><br><span class="line"></span><br><span class="line">    HomeForSale&amp; operator=(const HomeForSale&amp;);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>将链接错误移至编译期是可能的，越早侦测出错误越好，只要将<code>copy</code>构造函数和<code>copy assignment</code>操作符声明为<code>private</code>就可以做到，不过要在一个专门为了阻止<code>copying</code>动作而设计的<code>base class</code>内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Uncopyable &#123;</span><br><span class="line"></span><br><span class="line">protected:</span><br><span class="line"></span><br><span class="line">    Uncopyable() &#123;&#125; // 允许 derived 对象构造和析构</span><br><span class="line"></span><br><span class="line">    ~Uncopyable() &#123;&#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    Uncopyable(const Uncopyable&amp;); // 但阻止 copying</span><br><span class="line"></span><br><span class="line">    Uncopyable&amp; operator=(const Uncopyable&amp;);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 继承 Uncopyable</span><br><span class="line"></span><br><span class="line">class HomeForSale : private Uncopyable &#123;</span><br><span class="line"></span><br><span class="line">    ...     // class 不再声明 copy 构造函数和 copy assignment 操作符</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这样的话，只要任何尝试拷贝 <code>HomeForSale</code>对象，编译器便试着生成一个 <code>copy</code> 构造函数和一个<code>copy assignment</code> 操作符，这些函数的“编译器生成版”会尝试调用其<code>base classes</code>的对应兄弟，因为<code>base class</code> 的拷贝函数是<code>private</code> ，所以那些调用会被编译器拒绝。</p>
+<p>小结：</p>
+<ul>
+<li>为驳回编译器暗自提供的机能，可将相应的成员函数声明为<code>private</code>并且不予实现。使用像<code>Uncopyable</code>这样的<code>base class</code>也是一种做法。<code>boost</code>提供一个 <code>noncopyable</code>的<code>class</code>。</li>
+</ul>
+<h2 id="条款07：为多态基类声明-virtual-析构函数"><a href="#条款07：为多态基类声明-virtual-析构函数" class="headerlink" title="条款07：为多态基类声明 virtual 析构函数"></a>条款07：为多态基类声明 virtual 析构函数</h2><p>polymorphic（带多态性质的）<code>base class</code> ，这种 <code>base class</code> 的设计目的是为了用来“通过 base class 接口处理 derived class 对象”。</p>
+<p>C++明确指出，当 <code>derived class</code> 对象经由一个 <code>base class</code> 指针被删除，而该 <code>base class</code> 带着一个 <code>non-virtual</code> 析构函数，其结果未有定义——实际执行时通常发生的是对象的<code>derived</code>成分（子类的成员变量）没被销毁。</p>
+<p>解决方法是：给 <code>base class</code> 一个 <code>virtual</code> 析构函数，此后 <code>delete</code> 基类指针，子类对象也会析构掉。</p>
+<p>任何 <code>class</code> 只要带有 <code>virtual</code> 函数几乎确定应该也有一个 <code>virtual</code> 析构函数。</p>
+<p>如果并不打算被用做一个<code>base class</code> ，令其析构函数为 <code>virtual</code> 往往是个馊主意。</p>
+<p>想实现出 <code>virtual</code> 函数，对象必须携带某些信息，主要用来在运行期决定哪一个 <code>virtual</code> 函数该被调用。这份信息通常是由一个所谓的<code>vptr</code>——虚表指针指出。<code>vptr</code> 指向一个由函数指针构成的数组，称为 <code>vtbl</code>——虚表；每一个带有 <code>virtual</code> 函数的类都有一个相应的 <code>vtbl</code>。当对象调用某一 <code>virtual</code> 函数，实际被调用的函数取决于该对象的 <code>vtpr</code> 所指的那个 <code>vtbl</code>——编译器在其中寻找适当的函数指针。</p>
+<p>所以如果 <code>class</code> 内含虚函数，其对象的体积会增加，多一个 <code>vtpr</code>，这会带来一些问题。</p>
+<p>析构函数的运作方式是，最深层派生的那个 class 其析构函数最先被调用，然后是其每一个 <code>base class</code> 的析构函数被调用。</p>
+<p>如果企图继承一个标准容器或任何其他“带有 non-virtual 析构函数”的 <code>class</code>，都是错误的。</p>
+<p>小结：</p>
+<ul>
+<li><p>polymorphic（带多态性质的）base classes 应该声明为一个 virtual 析构函数。如果 class 带有任何 virtual 函数，它就应该拥有一个 virtual 析构函数。</p>
+</li>
+<li><p>Classes 的设计目的如果不是作为 base class 使用，或不是为了具备多态性，就不该声明 virtual 析构函数。</p>
+</li>
+</ul>
+<h2 id="条款08：别让异常逃离析构函数"><a href="#条款08：别让异常逃离析构函数" class="headerlink" title="条款08：别让异常逃离析构函数"></a>条款08：别让异常逃离析构函数</h2><p>C++ 并不禁止析构函数吐出异常，但它不鼓励这样做。程序可能过早结束或出现不明确行为。</p>
+<p>·</p>
+<p>但是你的析构函数必须执行一个动作，而该动作可能会在失败时抛出异常，该怎么办？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class DBConn &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ~DBConn() &#123; // 确保数据库连接总是被关闭</span><br><span class="line"></span><br><span class="line">        db.close();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    DBConnection db;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>比如上面这种情况，只要调用 <code>close</code> 成功，一切都美好。但如果该调用导致异常，DBConn 析构函数会传播该异常，也就是允许它离开这个析构函数。</p>
+<p>第一个方法，如果抛出异常就结束程序，通常通过调用 <code>abort</code> 完成。如果程序遭遇一个“于析构期间发生的错误”后无法继续执行，“强迫结束程序”是个合理选项。毕竟它可以阻止异常从析构函数传播出去（那会导致不明确行为）。</p>
+<p>第二个方法，吞下因调用 <code>close</code> 而发生的异常。一般而言，这是个坏主意。</p>
+<p>这两种方法都不太好，问题在于两者都无法对“导致 close 抛出异常”的情况做出反应。一个较佳的策略是重新设计 DBConn 接口，使其客户有机会对可能出现的问题作出反应。比如下面这样改进，自己提供一个 <code>close</code>函数。</p>
+<p>小结：</p>
+<ul>
+<li><p>析构函数绝对不能抛出异常。如果一个被析构函数调用的函数可能抛出异常，析构函数应该捕捉任何异常，然后吞下它们（不传播）或结束程序。</p>
+</li>
+<li><p>如果客户需要对某个操作函数运行期间抛出的异常做出反应，那么 class 应该提供一个普通函数（而非在析构函数中）执行该操作。</p>
+</li>
+</ul>
+<h2 id="条款09：绝不在构造和析构过程中调用-virtual-函数"><a href="#条款09：绝不在构造和析构过程中调用-virtual-函数" class="headerlink" title="条款09：绝不在构造和析构过程中调用 virtual 函数"></a>条款09：绝不在构造和析构过程中调用 virtual 函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Transaction &#123; // 所有交易的 base class</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    Transaction();</span><br><span class="line"></span><br><span class="line">    virtual void logTransaction() const = 0; // 做出一份因类型不同而不同的日志记录</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Transaction::Transaction() &#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    logTransaction(); // 最后动作是log这笔交易</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class BuyTransaction : public Transaction &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void logTransaction() const;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class SellTransaction : public Transaction &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void logTransaction() const;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>构造函数的运作机制是，<code>base class</code> 构造函数的执行更早于 <code>derived class</code> 构造函数。<code>base class</code> 构造期间 <code>virtual</code> 函数绝不会下降到 <code>derived class</code> 阶层。在 <code>base class</code> 构造期间，<code>virtual</code> 函数不是 <code>virtual</code> 函数。</p>
+<p>当 <code>base class</code> 构造函数执行时 <code>derived class</code> 的成员变量尚未初始化。如果此期间调用的 <code>virtual</code> 函数下降至 <code>derived classes</code> 阶层，要知道 <code>derived class</code> 的函数几乎必然取用 local 成员变量，而那些成员变量尚未初始化。</p>
+<p>更根本的原因是：在 <code>derived class</code> 对象的 <code>base class</code> 构造期间，对象的类型是 <code>base class</code> 而不是 <code>derived class</code>。不只 <code>virtual</code> 函数会被编译器解析至 <code>base class</code>，若使用运行期类型信息，例如 <code>dynamic_cast，也会把对象视为</code>base class<code>类型。这样对待是合理的，当子类对象的“子类专属成分”尚未初始化，所以面对它们，最安全的做法就是视它们不存在。对象在</code>derived class<code>构造函数开始执行前不会成为一个</code>derived class` 对象。</p>
+<p>相同道理也适用于析构函数。一旦 <code>derived class</code> 析构函数开始执行，对象内的 <code>derived class</code> 成员变量便呈现未定义值，所以 C++ 视它们仿佛不再存在。进入 <code>base class</code> 析构函数后对象就成为一个 <code>base class</code> 对象。</p>
+<p>显然在  <code>Transaction</code> 构造函数内对对象调用 <code>virtual</code> 函数是一种错误做法。但如何确保每一次有 <code>Tranaction</code> 继承体系上的对象被创建，就会有适当版本的 <code>logTransaction</code> 被调用呢？</p>
+<p>由于无法使用 virtual 函数从 base classes 向下调用，在构造期间，你可以藉由“令 derived classes 将必要的构造信息向上传递至 base class 构造函数” 替换之加以弥补。</p>
+<p>小结：</p>
+<ul>
+<li>在构造和析构期间不要调用 virtual 函数，因为这类调用从不下降至 derived class （比起当前执行构造函数和析构函数的那层）。</li>
+</ul>
+<h2 id="条款10：令-operator-返回一个-refernce-to-this"><a href="#条款10：令-operator-返回一个-refernce-to-this" class="headerlink" title="条款10：令 operator= 返回一个 refernce to *this"></a>条款10：令 operator= 返回一个 refernce to *this</h2><p>关于赋值，可以把它们写成连锁形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">int x, y, z;</span><br><span class="line"></span><br><span class="line">x = y = z = 15;</span><br></pre></td></tr></table></figure>
+<p>为了实现“连锁赋值”，赋值操作符必须返回一个 reference 指向操作符的左侧实参。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Widget &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    Widget&amp; operator=(const Widget&amp; rhs) &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        return *this; // 返回左侧对象</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个协议不仅适用于以上的标准赋值形式，也适用于所有赋值相关的运算，例如 +=、-=、*=等。</p>
+<p>这只是个协议，并无强制性。这份协议被所有内置类型和标准程序库提供的类型共同遵守。</p>
+<p>小结：</p>
+<ul>
+<li>令赋值（assignment）操作符返回一个 reference to *this。</li>
+</ul>
+<h2 id="条款11：在-operator-中处理“自我赋值”"><a href="#条款11：在-operator-中处理“自我赋值”" class="headerlink" title="条款11：在 operator= 中处理“自我赋值”"></a>条款11：在 operator= 中处理“自我赋值”</h2><p>自我赋值发生在对象被赋值给自己时，这看起来有点愚蠢，但它合法。</p>
+<p>有些自我赋值看起来并不明显，是“别名”带来的结果：所谓“别名”就是“有一个以上的方法指称某对象”。一般而言如果某段代码操作 pointers 或 reference 而它们被用来“指向多个相同类型的对象”，就需考虑这些对象是否为同一个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 一个不具备 自我赋值安全 &amp;&amp; 异常安全的例子</span><br><span class="line"></span><br><span class="line">class Bitmap &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">class Widget &#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">   Bitmap* pb;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Widget&amp; Widget::operator=(const Widget&amp; rhs) &#123;</span><br><span class="line"></span><br><span class="line">    delete pb;</span><br><span class="line"></span><br><span class="line">    pb = new Bitmap(*rhs.pb);</span><br><span class="line"></span><br><span class="line">    return *this;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的自我赋值问题是，*this 和 rhs 有可能是同一对象。delete 有可能也销毁了 rhs 的 bitmap。</p>
+<p>传统做法是加一个“证同测试”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">if (this == &amp;rhs)     return *this;</span><br></pre></td></tr></table></figure>
+<p>这个版本解决了“自我赋值安全性”，但不具备“异常安全性”，如果 <code>new</code>导致异常（分配时内存不足或copy构造函数抛出异常），Widget 最终会持有一个指针指向一块被删除的 Bitmap。</p>
+<p>令人高兴的是，让 <code>operator=</code> 具备“异常安全性”往往自动获得“自我赋值安全”的回报。我们只需注意在复制 pb 所指东西之前别删除 pb。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Widget&amp; Widget::operator=(const Widget&amp; rhs) &#123;</span><br><span class="line"></span><br><span class="line">    Bitmap* pOrig = pb;</span><br><span class="line"></span><br><span class="line">    pb = new Bitmap(*rhs.pb);</span><br><span class="line"></span><br><span class="line">    delete pOrig;</span><br><span class="line"></span><br><span class="line">    return *this;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>小结：</p>
+<ul>
+<li><p>确保当对象自我赋值时 operator= 有良好行为。其中技术包括比较“来源对象”和“目标对象”地址、精心周到的语句顺序、以及 copy-and-swap。</p>
+</li>
+<li><p>确定任何函数如果操作一个以上对象，而其中多个对象是同一个对象时，其行为仍然正确。</p>
+</li>
+</ul>
+<h2 id="条款12：复制对象时勿忘其每一个成分"><a href="#条款12：复制对象时勿忘其每一个成分" class="headerlink" title="条款12：复制对象时勿忘其每一个成分"></a>条款12：复制对象时勿忘其每一个成分</h2><p>条款5观察到编译器会在必要时为我们的 classes 创建 copying 函数，并说明这些“编译器生成版”的行为：将被拷对象的所有成员变量都做一份拷贝。</p>
+<p>当编写一个 copying 函数时，请确保：第一种情况，复制所有 local 成员变量；第二种情况，调用所有 <code>base class</code> 内的适当的 copying 函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class PriorityCustomer : Customer &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    PriorityCustomer(const PriorityCustomer&amp; rhs);</span><br><span class="line"></span><br><span class="line">    PriorityCustomer&amp; operator=(const Priority&amp; rhs);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    int priority;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PriorityCustomer::PriorityCustomer(const PriorityCustomer&amp; rhs)</span><br><span class="line"></span><br><span class="line">    : priority(rhs.priority) &#123;</span><br><span class="line"></span><br><span class="line">    logCall(&quot;PriorityCustomer copy constructor&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PriorityCustomer&amp; PriorityCustomer::operator=(const PriorityCustomer&amp; rhs) &#123;</span><br><span class="line"></span><br><span class="line">    logCall(&quot;PriorityCustomer assignment&quot;);</span><br><span class="line"></span><br><span class="line">    priority = rhs.priority;</span><br><span class="line"></span><br><span class="line">    return *this;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种情况就是复制了 <code>PriorityCustomer</code> 声明的成员变量，但是每个 <code>PriorityCustomer</code> 还内含它所继承的 Customer 成员变量副本，而那些成员变量却未被复制。 <code>PriorityCustomer</code> 对象的 <code>Customer</code> 成分会被不带实参的 <code>Customer</code> 构造函数，即 <code>default</code> 构造函数初始化。</p>
+<p>任何时候只要你承担起“为 derived class 撰写 copying 函数”的重责大任，必须很小心地复制其 <code>base class</code> 成分，那些成分往往是 <code>private</code> 的，所以你无法直接访问它们，应该让 <code>derived class</code> 的 copying 函数调用响应的 <code>base class</code> 函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">PriorityCustomer::PriorityCustomer(const PriorityCustomer&amp; rhs)</span><br><span class="line"></span><br><span class="line">    : Customer(rhs),</span><br><span class="line"></span><br><span class="line">    priority(rhs.priority) &#123;</span><br><span class="line"></span><br><span class="line">    logCall(&quot;PriorityCustomer copy constructor&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PriorityCustomer&amp; PriorityCustomer::operator=(const PriorityCustomer&amp; rhs) &#123;</span><br><span class="line"></span><br><span class="line">    logCall(&quot;PriorityCustomer assignment&quot;);</span><br><span class="line"></span><br><span class="line">    Customer::operator=(rhs);</span><br><span class="line"></span><br><span class="line">    priority = rhs.priority;</span><br><span class="line"></span><br><span class="line">    return *this;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个 copying 函数往往有近似相同的实现本体，这可能会诱使你让某个函数调用另一个函数以避免代码重复。但是令某个 copying 函数调用另一个 却无法达到想要的目标。</p>
+<p>消除重复代码的做法是，建立一个新的成员函数给两者调用，这样的函数往往是 <code>private</code> 而且常被命名为 <code>init</code>。</p>
+<p>小结：</p>
+<ul>
+<li>Copying 函数应该确保复制“对象内的所有成员变量”及“所有 base class 成分”。</li>
+<li>不要尝试以某个 copying 函数实现另一个 copying 函数，应该将共同机能放进第三个函数中，并由两个 copying 函数共同调用。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Duxm WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/04/让自己习惯C/" rel="next" title="让自己习惯C++">
+                <i class="fa fa-chevron-left"></i> 让自己习惯C++
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDAwMC8yMDUzNg"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/WechatIMG1.jpg" alt="Duxm">
+            
+              <p class="site-author-name" itemprop="name">Duxm</p>
+              <p class="site-description motion-element" itemprop="description">Duxm | Software Engineer</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tanswer" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:98duxm@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/tanswer" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="skype:live:1124169207?call" target="_blank" title="Skype">
+                      
+                        <i class="fa fa-fw fa-skype"></i>Skype</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/tanswer_" title="CSDN" target="_blank">CSDN</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.xiyoulinux.org/" title="XiyouLinuxGroup" target="_blank">XiyouLinuxGroup</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款05：了解C-默认编写并调用了哪些函数"><span class="nav-number">1.</span> <span class="nav-text">条款05：了解C++默认编写并调用了哪些函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款06：若不想使用编译器自动生成的函数，就该明确拒绝"><span class="nav-number">2.</span> <span class="nav-text">条款06：若不想使用编译器自动生成的函数，就该明确拒绝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款07：为多态基类声明-virtual-析构函数"><span class="nav-number">3.</span> <span class="nav-text">条款07：为多态基类声明 virtual 析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款08：别让异常逃离析构函数"><span class="nav-number">4.</span> <span class="nav-text">条款08：别让异常逃离析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款09：绝不在构造和析构过程中调用-virtual-函数"><span class="nav-number">5.</span> <span class="nav-text">条款09：绝不在构造和析构过程中调用 virtual 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款10：令-operator-返回一个-refernce-to-this"><span class="nav-number">6.</span> <span class="nav-text">条款10：令 operator= 返回一个 refernce to *this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款11：在-operator-中处理“自我赋值”"><span class="nav-number">7.</span> <span class="nav-text">条款11：在 operator= 中处理“自我赋值”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款12：复制对象时勿忘其每一个成分"><span class="nav-number">8.</span> <span class="nav-text">条款12：复制对象时勿忘其每一个成分</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duxm</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
