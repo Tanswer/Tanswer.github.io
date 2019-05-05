@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="条款一：视C++为一个语言联邦今天的C++是个多重泛型编程语言（multiparadigm programming language），一个同时支持过程（procedural）、面向对象（object-oriented），函数形式（functional），泛型形式（generic），元编程形式（metaprogramming）的语言。 C++主要的次语言：  C。  Object-Oriented">
+<meta name="description" content="C++程序中最常使用的资源就是动态分配内存，其他的资源还有文件描述符、互斥锁、图形界面中的字形和笔刷、数据库连接、以及网络Socket。 条款13：以对象管理资源有时候会因为种种原因，略过 delete 语句，这样就会导致内存泄露。 为确保资源总是被释放，需要将资源放进对象内，便可倚赖 C++ 的析构函数自动调用机制确保资源被释放。  获得资源后立刻放进管理对象：“以对象管理资源”的观念常被称为“">
 <meta property="og:type" content="article">
-<meta property="og:title" content="让自己习惯C++">
-<meta property="og:url" content="https://tanswer.github.io/2019/05/04/让自己习惯C/index.html">
+<meta property="og:title" content="资源管理">
+<meta property="og:url" content="https://tanswer.github.io/2019/05/05/资源管理/index.html">
 <meta property="og:site_name" content="Duxm&#39;s Blog">
-<meta property="og:description" content="条款一：视C++为一个语言联邦今天的C++是个多重泛型编程语言（multiparadigm programming language），一个同时支持过程（procedural）、面向对象（object-oriented），函数形式（functional），泛型形式（generic），元编程形式（metaprogramming）的语言。 C++主要的次语言：  C。  Object-Oriented">
+<meta property="og:description" content="C++程序中最常使用的资源就是动态分配内存，其他的资源还有文件描述符、互斥锁、图形界面中的字形和笔刷、数据库连接、以及网络Socket。 条款13：以对象管理资源有时候会因为种种原因，略过 delete 语句，这样就会导致内存泄露。 为确保资源总是被释放，需要将资源放进对象内，便可倚赖 C++ 的析构函数自动调用机制确保资源被释放。  获得资源后立刻放进管理对象：“以对象管理资源”的观念常被称为“">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-04T12:58:51.113Z">
+<meta property="og:updated_time" content="2019-05-05T04:28:56.578Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="让自己习惯C++">
-<meta name="twitter:description" content="条款一：视C++为一个语言联邦今天的C++是个多重泛型编程语言（multiparadigm programming language），一个同时支持过程（procedural）、面向对象（object-oriented），函数形式（functional），泛型形式（generic），元编程形式（metaprogramming）的语言。 C++主要的次语言：  C。  Object-Oriented">
+<meta name="twitter:title" content="资源管理">
+<meta name="twitter:description" content="C++程序中最常使用的资源就是动态分配内存，其他的资源还有文件描述符、互斥锁、图形界面中的字形和笔刷、数据库连接、以及网络Socket。 条款13：以对象管理资源有时候会因为种种原因，略过 delete 语句，这样就会导致内存泄露。 为确保资源总是被释放，需要将资源放进对象内，便可倚赖 C++ 的析构函数自动调用机制确保资源被释放。  获得资源后立刻放进管理对象：“以对象管理资源”的观念常被称为“">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://tanswer.github.io/2019/05/04/让自己习惯C/">
+  <link rel="canonical" href="https://tanswer.github.io/2019/05/05/资源管理/">
 
 
 
 
 
-  <title>让自己习惯C++ | Duxm's Blog</title>
+  <title>资源管理 | Duxm's Blog</title>
   
 
 
@@ -274,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tanswer.github.io/2019/05/04/让自己习惯C/">
+    <link itemprop="mainEntityOfPage" href="https://tanswer.github.io/2019/05/05/资源管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Duxm">
@@ -291,7 +291,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">让自己习惯C++</h1>
+          <h1 class="post-title" itemprop="name headline">资源管理</h1>
         
 
         <div class="post-meta">
@@ -303,8 +303,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-04T01:03:37+08:00">
-                2019-05-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-05T12:27:57+08:00">
+                2019-05-05
               </time>
             
 
@@ -394,76 +394,71 @@
       
 
       
-        <h2 id="条款一：视C-为一个语言联邦"><a href="#条款一：视C-为一个语言联邦" class="headerlink" title="条款一：视C++为一个语言联邦"></a>条款一：视C++为一个语言联邦</h2><p>今天的C++是个多重泛型编程语言（multiparadigm programming language），一个同时支持过程（procedural）、面向对象（object-oriented），函数形式（functional），泛型形式（generic），元编程形式（metaprogramming）的语言。</p>
-<p>C++主要的次语言：</p>
+        <p>C++程序中最常使用的资源就是动态分配内存，其他的资源还有文件描述符、互斥锁、图形界面中的字形和笔刷、数据库连接、以及网络Socket。</p>
+<h2 id="条款13：以对象管理资源"><a href="#条款13：以对象管理资源" class="headerlink" title="条款13：以对象管理资源"></a>条款13：以对象管理资源</h2><p>有时候会因为种种原因，略过 <code>delete</code> 语句，这样就会导致内存泄露。</p>
+<p>为确保资源总是被释放，需要将资源放进对象内，便可倚赖 C++ 的析构函数自动调用机制确保资源被释放。</p>
 <ul>
-<li><p>C。</p>
-</li>
-<li><p>Object-Oriented C++。class、封装、继承、多态等。</p>
-</li>
-<li><p>Template C++。C++泛型编程部分。</p>
-</li>
-<li><p>STL。容器、迭代器、算法以及函数对象</p>
-</li>
+<li>获得资源后立刻放进管理对象：“以对象管理资源”的观念常被称为“资源取得时机便是初始化时机”（Resource Acquisition Is Initialization，RAII）。有时候获得资源后立刻初始化某个管理对象，有时候获得的资源被拿来赋值某个管理对象，但不论哪种做法，每一笔资源都在获得的同时立刻被放进管理对象中。</li>
 </ul>
-<h2 id="条款二：尽量以-const、enum、inline-替换-define"><a href="#条款二：尽量以-const、enum、inline-替换-define" class="headerlink" title="条款二：尽量以 const、enum、inline 替换 #define"></a>条款二：尽量以 const、enum、inline 替换 #define</h2><p><code>#define</code> 是在预处理阶段处理的，记号从未被编译器看见，所使用的名称也可能从未进入记号表（symbol table）。</p>
-<p>解决方法是以一个常量替换宏。</p>
-<p>有一个特殊情况是 class 专属常量。将常量的作用域限制在类内，必须让它成为 class 的 一个成员；为了确保此常量至多只有一份实体，必须让它成为 <code>static</code> 成员。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class GamePlayer &#123;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    static const int NumTurns = 5;     // 常量声明式</span><br><span class="line"></span><br><span class="line">    int scores[NumTurns];                  // 使用该常量</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>通常 C++ 要求你对你使用的任何东西提供一个定义式，对于类内静态整形变量，要在实现文件 .c 中提供定义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const int GamePlayer::NumTurns;</span><br></pre></td></tr></table></figure>
-<p>这几乎是你唯一需要做的事情。唯一例外是当你在 class 编译期间需要一个 class 常量值，万一你的编译器不允许“static整数型class常量”完成“in-class 初值设定”，可改用所谓的“The enum hack” 补偿做法。其理论基础是：一个属于枚举类型的数值可权充 ints 被使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class GamePlayer &#123;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    enum &#123; NumTurns = 5 &#125;;       // the enum hack</span><br><span class="line"></span><br><span class="line">    int scores[NumTurns];         // 使用该常量</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>认识 enum hack：</p>
 <ul>
-<li><p>enum hack 的行为某方面来说比较像 <code>#define</code> 而非 <code>const</code>。取一个 <code>const</code> 地址是合法的，但 <code>#define</code> 和 <code>enum</code> 则不合法。</p>
-</li>
-<li><p>纯粹为了实用主义，事实上，enum hack 是模板元编程的基础。</p>
-</li>
+<li>管理对象运用析构函数确保资源被释放。一旦对象被销毁，其析构函数自然会被自动调用，于是资源被释放。</li>
 </ul>
-<p>另一个常见的用法是用 <code>#define</code> 实现宏，看起来像函数，但没有函数调用的开销，但是这有很多缺点，有时候会产生一些不可预料的行为。解决方法是写出 <code>template inline</code>函数。</p>
+<p>一定要注意别让多个 <code>auto_ptr</code> 同时指向同一对象，如果真是那样，对象会被删除一次以上，会产生未定义行为。为预防这个问题，<code>auto_ptr</code> 有一个不寻常的性质：若通过 copy 构造函数或者 <code>copy assignment</code> 操作符复制它们，它们会变成 <code>NULL</code>，而复制所得的指针将取得资源的唯一拥有权。</p>
+<p><code>auto_ptr</code> 的替代方案是 引用计数型智能指针 <code>shared_ptr</code>，持续追踪共有多少对象指向某笔资源，并在无人指向它时自动删除该资源。</p>
 <p>小结：</p>
 <ul>
-<li><p>对于单纯变量，尽量以 const 对象或者 enum 替换 #define。</p>
-</li>
-<li><p>对于形似函数的宏，最好改用 inline 函数替换 #define。</p>
-</li>
+<li>为防止资源泄露，请使用 <code>RAII</code> 对象，它们在构造函数中获得资源并在析构函数中释放资源。</li>
+<li>两个常被使用的 <code>RAII classes</code> 分别是 <code>tr1::shared_ptr</code> 和 <code>auto_ptr</code>。前者通常是较佳选择，因为其 copy 行为比较直观。若选择 <code>auto_ptr</code> 复制动作会使它（被复制物）指向 <code>null</code>。</li>
 </ul>
-<h2 id="条款三：尽可能使用-const"><a href="#条款三：尽可能使用-const" class="headerlink" title="条款三：尽可能使用 const"></a>条款三：尽可能使用 const</h2><p><code>const</code> 允许你告诉编译器或其他程序员某值应该保持不变，只要这是事实，就该说出来。</p>
-<p><code>const</code> 出现在 * 两边分别代表什么呢？</p>
-<p>声明迭代器为 <code>const</code> 就像声明指针为 const 一样，表示迭代器不得指向不同的东西，但它指的东西的值是可以改变的。如果想让它指的东西的值不能变，则要用 <code>const_iterator</code>。</p>
-<p><code>const</code> 最具威力的用法是面对函数声明时的应用。在一个函数声明式内，<code>const</code> 可以和函数返回值、参数、函数自身（成员函数）产生关联。</p>
-<p>const 成员函数，是为了确认该函数可作用于<code>const</code>对象身上。两个关键原因：第一，使 class 接口比较容易被理解，哪些函数可以改动对象内容，哪些不可以；第二，使操作<code>const</code>对象成为可能。</p>
-<p>两个成员函数如果只是常量性不同，可以被重载。这是一个重要的C++特性。</p>
-<p>真实程序中，<code>const</code>对象大多用于 passed by pointer-to-const 或者 passed by reference-to-const 的传递结果。</p>
-<p>同时实现 <code>const</code>版本和<code>non-const</code>版本的成员函数，如何避免代码重复？可以用 <code>const</code> 版本实现出 <code>non-const</code>版本，即用<code>const</code>成员函数实现出其<code>non-const</code>孪生兄弟。</p>
-<p>反向做法，即令 <code>const</code>版本调用<code>non-const</code>版本以避免重复是不对的。如果在<code>const</code>成员函数内调用了<code>non-const</code>版本的，则不保证绝不改变对象的逻辑状态。</p>
+<h2 id="条款14：在资源管理类中小心-copying-行为"><a href="#条款14：在资源管理类中小心-copying-行为" class="headerlink" title="条款14：在资源管理类中小心 copying 行为"></a>条款14：在资源管理类中小心 copying 行为</h2><p>当一个 <code>RAII</code> 对象被复制，会发生什么事？大多数时候你会选择以下两种可能：</p>
+<ul>
+<li>禁止复制。许多时候允许 <code>RAII</code> 对象被复制并不合理，你便应该禁止之。</li>
+<li>对底层资源祭出“引用计数法”。通常只要内含一个 <code>tr1::shared_ptr</code> 成员变量，<code>RAII classes</code> 便可实现出 <code>reference-counting copying</code> 行为。</li>
+</ul>
+<p>当我们用 <code>Mutex</code>，我们想要做的释放动作是解除锁定而非默认的删除。幸运的是 <code>tr1::shared_ptr</code> 允许指定所谓的“删除器”，那是一个函数或函数对象，当引用次数为0时便被调用（此机能并不存在于 auto_ptr——它总是将其指针删除）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Lock &#123;</span><br><span class="line">public:</span><br><span class="line">    explicit Lock(Mutex* pm) : mutexPtr(pm, unlock) &#123;</span><br><span class="line">        // 以某个Mutex初始化shared_ptr 并以 unlock 函数做为删除器</span><br><span class="line">        lock(mutexPtr.get());</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    std::shared_ptr&lt;Mutex&gt; mutexPtr; // 使用 shared_ptr替换raw pointer</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>不需要再声明析构函数，因为没有必要。class 析构函数会自动调用其 <code>non-static</code> 成员变量的析构函数，而 <code>mutexPtr</code> 的析构函数会在互斥器的引用次数为0时自动调用 <code>std::shared_ptr</code> 的删除器（本例为 <code>unlock</code>）。</p>
+<ul>
+<li>复制底部资源。可以针对一份资源拥有其任意数量的副本。在此情况下复制资源管理对象，应该同时也复制其所包覆的资源。也就是说，此时进行的是“深度拷贝”。</li>
+<li>转移底部资源的控制权。某些罕见场合下你可能希望确保永远只有一个 <code>RAII</code> 对象指向一个未加工资源（<code>raw pointer</code>），即使 <code>RAII</code> 对象被复制依然如此。这是 <code>auto_ptr</code> 奉行的复制意义。</li>
+</ul>
 <p>小结：</p>
 <ul>
-<li><p>将某些东西声明为<code>const</code>可帮助编译器侦测出错误用法。<code>const</code>可被施加于任何作用域的对象、函数参数、返回值、成员函数本体。</p>
-</li>
-<li><p>编译器强制实行 bitwise constness，即成员函数只有在不更改对象之任何成员变量（static变量除外）时才可以说是<code>const</code>，但你编写程序时应该使用“概念上的常量性”。</p>
-</li>
-<li><p>当 <code>const</code> 和 <code>non-const</code>成员函数有着实质等价的实现时，令 <code>non-const</code> 版本调用 <code>const</code> 版本可避免代码重复，反之不允许。</p>
-</li>
+<li>复制 <code>RAII</code> 对象必须一并复制它所管理的资源，所以资源的 copying 行为决定 <code>RAII</code> 对象的 copying 行为。</li>
+<li>普遍而常见的 <code>RAII class</code>     copying 行为是：禁止 copying 、施行引用计数法。不过其他行为也都可能被实现。</li>
 </ul>
-<h2 id="条款04：确定对象被使用前已被初始化"><a href="#条款04：确定对象被使用前已被初始化" class="headerlink" title="条款04：确定对象被使用前已被初始化"></a>条款04：确定对象被使用前已被初始化</h2><p>读取未初始化的值会导致不明确的行为。</p>
-<p>对于无任何成员的内置类型，必须手工完成此事。对于内置类型以外的任何其他东西，初始化责任落在构造函数上，规则就是：确保每个构造函数都将对象的每一个成员初始化。</p>
-<p>这个规则很简单，重要的是别混淆了初始化和赋值。C++规定，对象的成员初始化动作发生在进入构造函数本体之前。</p>
-<p>构造函数的一个较佳写法是，使用成员初始值列表替换赋值动作。对大多数类型而言，比起先调用<code>default</code>构造函数，再调用 <code>copy assignment</code>操作符，单只调用一次<code>copy</code>构造函数是比较高效的。对于内置类型来说，效率是一样的，但为了形式统一，最好也通过初始值列表来初始化。</p>
-<p>C++有着十分固定的“成员初始化次序”。<code>base classes</code>总是早于其 <code>derived classes</code>被初始化，而 <code>class</code> 的成员变量总是按照声明的次序初始化，即使在成员初始化列以不同次序出现。</p>
-<p>C++ 对“定义于不同编译单元的<code>non-local static</code>对象”的初始化次序并无明确定义。因为决定它们的次序非常困难。</p>
-<p>消除这个问题的方法是：将每个 <code>non-local static</code> 对象搬到自己专属的函数内（该对象在此函数内被声明为<code>static</code>）。这些函数返回一个<code>reference</code>指向它所包含的对象，然后用户调用这个函数，而不直接指涉这些对象。换句话说，<code>non-local static</code>对象被<code>local static</code>对象替换了。这种结构下的<code>reference-returning</code>函数往往十分单纯：第一行定义并初始化一个<code>local static</code>对象，第二行返回它。</p>
-<p>C++保证，函数内的<code>local static</code>对象会在“该函数被调用”，“首次遇上该对象定义式”时被初始化。</p>
-<p>任何一种<code>non-const static</code>对象，不论它是<code>local</code>或<code>non-local</code>，在多线程环境下“等待某事发生”都会有麻烦。处理这个麻烦的一种做法是：在单线程启动阶段手工调用所有<code>reference-returning</code>函数，这可消除与初始化有关的竞态条件。</p>
+<h2 id="条款15：在资源管理类中提供对原始资源的访问"><a href="#条款15：在资源管理类中提供对原始资源的访问" class="headerlink" title="条款15：在资源管理类中提供对原始资源的访问"></a>条款15：在资源管理类中提供对原始资源的访问</h2><p>在一个完美世界中你将倚赖这样的资源管理类来处理和资源之间的所有互动，而不是玷污双手直接处理原始资源（raw resource）。</p>
+<p>但是在很多场合，许多 API 直接指涉资源，只得绕过资源管理对象，直接访问原始资源。这时候需要一个函数可将 <code>RAII class</code> 对象转换为其所内含之原始资源。</p>
+<p><code>shared_ptr</code> 和 <code>auto_ptr</code> 都提供一个 <code>get</code> 成员函数，用来执行显式转换，也就是返回智能指针内部的原始指针（的复件）。</p>
+<p><code>shared_ptr</code> 和 <code>auto_ptr</code> 也重载了 <code>operator-&gt;</code> 和 <code>operator*</code> ，它们允许隐式转换至底部原始指针。<br>由于有时候还是必须取得 <code>RAII</code> 对象内的原始资源，做法是提供一个隐式转换函数。</p>
 <p>小结：</p>
 <ul>
-<li><p>手工初始化内置型对象；</p>
-</li>
-<li><p>构造函数最好使用成员初始化列表，而不要在构造函数中使用赋值操作。初始值列表列出的成员变量，其排列次序应该和它们在类中的声明次序相同；</p>
-</li>
-<li><p>为免除“跨编译单元之初始化次序”的问题，请以<code>local static</code>对象替代<code>non-local static</code>对象。</p>
-</li>
+<li>APIs 往往要求访问原始资源，所以每一个 <code>RAII class</code> 应该提供一个“取得其所管理之资源”的方法。</li>
+<li>对原始资源的访问可能经由显示转换或隐式转换。一般而言显示转换比较安全，但隐式转换对客户比较方便。</li>
+</ul>
+<h2 id="条款16：成对使用-new-和-delete-时要采用相同形式"><a href="#条款16：成对使用-new-和-delete-时要采用相同形式" class="headerlink" title="条款16：成对使用 new 和 delete 时要采用相同形式"></a>条款16：成对使用 new 和 delete 时要采用相同形式</h2><p>要注意：即将被删除的那个指针，所指的是单一对象或对象数组？数组所用的内存通常还包括“数组大小”的记录，以便 <code>delete</code> 知道需要调用多少次析构函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::string* stringPtr1 = new std::string;</span><br><span class="line">str::string* stringPtr2 = new std::string[100];</span><br><span class="line">...</span><br><span class="line">delete stringPtr1;</span><br><span class="line">delete [] stringPtr2;</span><br></pre></td></tr></table></figure></p>
+<p>小结：</p>
+<ul>
+<li>如果你在 new 表达式中使用 []，必须在相应的 delete 表达式中也是用 []。</li>
+<li>如果你在 new 表达式中不使用 []，一定不要在相应的 delete 表达式中使用 []。</li>
+</ul>
+<h2 id="条款17：以独立语句将-newed-对象置入智能指针"><a href="#条款17：以独立语句将-newed-对象置入智能指针" class="headerlink" title="条款17：以独立语句将 newed 对象置入智能指针"></a>条款17：以独立语句将 newed 对象置入智能指针</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 函数原型</span><br><span class="line">processWidget(std::shared_ptr&lt;Widget&gt; pw, int priority);</span><br><span class="line"></span><br><span class="line">processWidget(new Widget, priority());</span><br></pre></td></tr></table></figure>
+<p>这种调用方式不能通过编译，<code>shared_ptr</code> 构造函数是个 <code>explicit</code> 构造函数，无法进行隐式转换。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">processWidget(std::shared_ptr&lt;widget&gt;(new Widget), priority());</span><br></pre></td></tr></table></figure></p>
+<p>这样写就可以通过编译，但是却可能发生资源泄露。</p>
+<p>在调用 <code>processWidget</code> 之前，编译器必须创建代码，做一下三件事：</p>
+<ul>
+<li>调用 priority</li>
+<li>执行 new Widget</li>
+<li>调用 shared_ptr 的构造函数</li>
+</ul>
+<p>和其他语言如 Java 不同，C++ 编译器没有特定次序完成这些事情。<code>new</code> 一定发生在 <code>shared_ptr</code> 构造之前，但是调用 <code>priority()</code> 就不确定了。如果第二步调用这个函数，那就是下面的顺序：</p>
+<ol>
+<li>执行 new Widget</li>
+<li>调用 priority()</li>
+<li>调用 shared_ptr 的构造函数<br>万一 <code>priority()</code> 的调用导致异常，会发生什么呢？答案是可能引发资源泄露。避免这类问题的方法是：使用分离语句，分别写出 （1）<code>new Widget</code> ，（2）将它置入一个智能指针内，然后再把智能指针传给 <code>processWidget</code>。</li>
+</ol>
+<p>小结：</p>
+<ul>
+<li>以独立语句将 newed 对象置入智能指针内。如果不这样做，一旦异常被抛出，有可能导致难以察觉的资源泄露。</li>
 </ul>
 
       
@@ -513,8 +508,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/30/有意义的命名与函数/" rel="next" title="有意义的命名与函数">
-                <i class="fa fa-chevron-left"></i> 有意义的命名与函数
+              <a href="/2019/05/04/构造-析构-赋值运算/" rel="next" title="构造/析构/赋值运算">
+                <i class="fa fa-chevron-left"></i> 构造/析构/赋值运算
               </a>
             
           </div>
@@ -522,10 +517,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/04/构造-析构-赋值运算/" rel="prev" title="构造/析构/赋值运算">
-                构造/析构/赋值运算 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -714,7 +705,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款一：视C-为一个语言联邦"><span class="nav-number">1.</span> <span class="nav-text">条款一：视C++为一个语言联邦</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款二：尽量以-const、enum、inline-替换-define"><span class="nav-number">2.</span> <span class="nav-text">条款二：尽量以 const、enum、inline 替换 #define</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款三：尽可能使用-const"><span class="nav-number">3.</span> <span class="nav-text">条款三：尽可能使用 const</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款04：确定对象被使用前已被初始化"><span class="nav-number">4.</span> <span class="nav-text">条款04：确定对象被使用前已被初始化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款13：以对象管理资源"><span class="nav-number">1.</span> <span class="nav-text">条款13：以对象管理资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款14：在资源管理类中小心-copying-行为"><span class="nav-number">2.</span> <span class="nav-text">条款14：在资源管理类中小心 copying 行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款15：在资源管理类中提供对原始资源的访问"><span class="nav-number">3.</span> <span class="nav-text">条款15：在资源管理类中提供对原始资源的访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款16：成对使用-new-和-delete-时要采用相同形式"><span class="nav-number">4.</span> <span class="nav-text">条款16：成对使用 new 和 delete 时要采用相同形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款17：以独立语句将-newed-对象置入智能指针"><span class="nav-number">5.</span> <span class="nav-text">条款17：以独立语句将 newed 对象置入智能指针</span></a></li></ol></div>
             
 
           </div>
