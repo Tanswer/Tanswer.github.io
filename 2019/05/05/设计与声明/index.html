@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="条款18：让接口容易被正确使用，不易被误用所谓的 “cross-DLL problem”，这个问题发生于“对象在动态连接程序库中被new创建，却在另一个 DLL 内被 delete 销毁”。这许多平台上，这一类“跨DLL之 new/delete成对运用”会导致运行期错误。 小结：  好的接口容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。  “促进正确使用”的办法包括接口一致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计与声明">
+<meta property="og:url" content="https://tanswer.github.io/2019/05/05/设计与声明/index.html">
+<meta property="og:site_name" content="Duxm&#39;s Blog">
+<meta property="og:description" content="条款18：让接口容易被正确使用，不易被误用所谓的 “cross-DLL problem”，这个问题发生于“对象在动态连接程序库中被new创建，却在另一个 DLL 内被 delete 销毁”。这许多平台上，这一类“跨DLL之 new/delete成对运用”会导致运行期错误。 小结：  好的接口容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。  “促进正确使用”的办法包括接口一致">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-05T15:02:39.164Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计与声明">
+<meta name="twitter:description" content="条款18：让接口容易被正确使用，不易被误用所谓的 “cross-DLL problem”，这个问题发生于“对象在动态连接程序库中被new创建，却在另一个 DLL 内被 delete 销毁”。这许多平台上，这一类“跨DLL之 new/delete成对运用”会导致运行期错误。 小结：  好的接口容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。  “促进正确使用”的办法包括接口一致">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tanswer.github.io/2019/05/05/设计与声明/">
+
+
+
+
+
+  <title>设计与声明 | Duxm's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duxm's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tanswer.github.io/2019/05/05/设计与声明/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Duxm">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/WechatIMG1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duxm's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计与声明</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-05T23:01:42+08:00">
+                2019-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  4.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="条款18：让接口容易被正确使用，不易被误用"><a href="#条款18：让接口容易被正确使用，不易被误用" class="headerlink" title="条款18：让接口容易被正确使用，不易被误用"></a>条款18：让接口容易被正确使用，不易被误用</h2><p>所谓的 “cross-DLL problem”，这个问题发生于“对象在动态连接程序库中被new创建，却在另一个 DLL 内被 delete 销毁”。这许多平台上，这一类“跨DLL之 new/delete成对运用”会导致运行期错误。</p>
+<p>小结：</p>
+<ul>
+<li><p>好的接口容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。</p>
+</li>
+<li><p>“促进正确使用”的办法包括接口一致性，以及与内置类型的行为兼容。</p>
+</li>
+<li><p>“阻止误用”的办法包括建立新类型、限制类型上的操作，束缚对象值，以及消除客户的资源管理责任。</p>
+</li>
+<li><p>shared_ptr 支持定制型删除器。这可防范 DLL 问题，可被用来自动解除互斥锁等等。</p>
+</li>
+</ul>
+<h2 id="条款19：设计-class-犹如设计-type"><a href="#条款19：设计-class-犹如设计-type" class="headerlink" title="条款19：设计 class 犹如设计 type"></a>条款19：设计 class 犹如设计 type</h2><p>当你定义一个新的 class，也就定义了一个新 type。</p>
+<p>如何设计高效的 classes 呢？首先必须了解你面对的问题。</p>
+<ul>
+<li><p>新 type 的对象如何被创建和销毁？会影响到构造函数和析构函数以及内存分配和释放函数。</p>
+</li>
+<li><p>对象的初始化和对象的赋值该有什么样的差别？这个决定了构造函数和赋值操作符的行为以及其间的差异。</p>
+</li>
+<li><p>新 type 的对象如果被 passed by value，意味着什么？copy构造函数用来定义一个type的 passed-by-value如何实现。</p>
+</li>
+<li><p>什么是新 type 的“合法值”？对成员变量而言，通常只有某些数值集是有效的。</p>
+</li>
+<li><p>你的新 type 需要配合某个继承图系吗？继承自既有的 classes，或者被继承。</p>
+</li>
+<li><p>你的新 type 需要什么样的转换？如果你希望允许类型T1之物被隐式转换为类型T2之物，就必须在 class T1 内写一个类型转换函数（<code>operator T2</code>）或在 class T2 内写一个 <code>non-explicit-one-argument</code>（可被单一实参调用）的构造函数。如果你只允许 <code>explicit</code> 构造函数存在，就得写出专门负责执行转换的函数。</p>
+</li>
+<li><p>什么样的操作符和函数对此新 type 而言是合理的？这个决定你jiang将为你的 class 声明哪些函数。</p>
+</li>
+<li><p>什么样的标准函数应该驳回？那些正是你必须声明为 private 者。</p>
+</li>
+<li><p>谁该取用新 type 的成员？这个提问可以帮助你决定哪个成员为 public或者private或者protected。它也帮助你决定哪个 class/function 应该是 friend，以及将它们嵌套于另一个之内是否合理。</p>
+</li>
+<li><p>什么是新 type 的“未声明接口”？</p>
+</li>
+<li><p>你的新 type 有多么一般化？或许你其实并非定义一个新 type，而是定义一整个 types 家族。果真如此就不该定义一个新 class，而是应该定义一个新的 class template。</p>
+</li>
+<li><p>你真的需要一个新 type 吗？如果只是定义新的 derived class 以便为既有的 class 添加机能，那么说不定单纯定义一或多个 non-member 函数或 templates ，更能够达到目标。</p>
+</li>
+</ul>
+<h2 id="条款20：宁以-pass-by-reference-to-const-替换-pass-by-value"><a href="#条款20：宁以-pass-by-reference-to-const-替换-pass-by-value" class="headerlink" title="条款20：宁以 pass-by-reference-to-const 替换 pass-by-value"></a>条款20：宁以 pass-by-reference-to-const 替换 pass-by-value</h2><p>缺省情况下 C++ 以 by value 方式传递对象至函数，或来自函数，即函数参数都是实参的副本，而调用端所获得的也是函数返回值的一个副本。这些副本由对象的 copy 构造函数产出，这可能使得 <code>pass-by-value</code> 成为昂贵的操作。</p>
+<p>以 by value 的方式传递对象，会发生多次构造和析构。<code>pass by reference-to-const</code>，可以回避构造和析构动作，因为没有任何对象被创建。将它声明为 <code>const</code> 是必要的，因为不这样做的话调用者会忧虑函数会不会改变他们传入的那个对象。</p>
+<p>以 <code>by reference</code> 方式传递参数也可以避免 slicing（对象切割）问题。</p>
+<p>当一个 <code>derived class</code> 对象以 <code>by value</code> 方式传递并被视为一个 <code>base class</code> 对象，<code>base class</code> 的 copy 构造函数会被调用，而“造成此对象的行为像个 derived class 对象”的那些特化性质全被切割掉了，仅仅留下一个 <code>base class</code> 对象。因为正是  <code>base class</code> 构造函数建立了它，但这不是你想要的。</p>
+<p>解决切割问题的办法，就是以 <code>by reference-to-const</code> 的方式传递。</p>
+<p>如果窥视 C++ 编译器的底层，你会发现，reference 往往以指针实现出来，因此 <code>pass by reference</code> 通常意味真正传递的是指针。因此如果你有个对象属于内置类型，<code>pass by value</code> 往往比 <code>pass by reference</code> 的效率高些。这个忠告也适用于 STL 的迭代器和函数对象。</p>
+<p>内置类型都相当小，因此有人认为，所有小型 type 都是 <code>pass by value</code> 的合格候选人，甚至它们是用户自定义的 class 亦然。这是个不可靠的推论。因为对象小并不意味其 copy 构造函数不昂贵，或者可能有效率上的争议，或者作为一个用户自定义类型，其大小容易有所变化。</p>
+<p>小结：</p>
+<ul>
+<li>尽量以 pass by reference-to-const 替换 pass by value。前者通常比较高效，并可避免切割问题。</li>
+<li>以上规则并不适用于内置类型，以及 STL 的迭代器和函数对象。对它们而言， pass by value 往往比较适当。</li>
+</ul>
+<h2 id="条款21：必须返回对象时，别妄想返回其-reference"><a href="#条款21：必须返回对象时，别妄想返回其-reference" class="headerlink" title="条款21：必须返回对象时，别妄想返回其 reference"></a>条款21：必须返回对象时，别妄想返回其 reference</h2><p>在坚定追求 <code>pass by reference</code> 的纯度中，他们一定会犯下一个致命错误：开始传递一些 reference 指向其实并不存在的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 一个有理数的 class，内含一个函数用来计算两个有理数的乘积</span><br><span class="line">class Rational &#123;</span><br><span class="line">public:</span><br><span class="line">    Retional(int numrator = 0, int denominator = 1);</span><br><span class="line">    ...</span><br><span class="line">private:</span><br><span class="line">    int n, d; // 分子和分母</span><br><span class="line"></span><br><span class="line">    friend const Rational operator*(const Rational&amp; lhs, const Rational&amp; rhs);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>记住，所谓 <code>reference</code> 只是个名称，代表某个既有对象。任何时候看到一个 <code>reference</code> 声明式，你都应该立刻问自己，它的另一个名称是什么？因为它一定是某物的另一个名称。</p>
+<p>如果将返回值改为 reference ，后者一定指向一个既有的 <code>Rational</code> 对象，内含两个 <code>Rational</code> 对象的乘积。我们当然不可能期望这样一个 内含乘积的 <code>Rational</code> 对象在调用 <code>operator*</code> 之前就存在，这并不合理。<br>如果 <code>operator*</code> 要返回一个 reference 指向如此数值，它必须自己创建那个 <code>Rational</code> 对象。函数创建对象的途径有二：在 stack 空间或 heap 空间创建之。</p>
+<p>如果是在 stack 空间创建的话，返回的结果仍然需要由构造函数构造起来，并不能避免调用构造函数，而且 local 对象在函数退出前被销毁了，它返回的 reference 指向一个已经被销毁的对象，显然是错误的。如果函数返回指针指向一个 local 对象，也是一样。</p>
+<p>如果在 heap 空间构造对象的话，还是必须付出一个“构造函数调用”代价，因为分配所得的内存将以一个适当的构造函数完成初始化动作。但问题是：谁该对着被你 new 出来的对象实施 delete？比如出现下面这样的语句：<code>w = x * y * z;</code><br>同一语句调用了两次 <code>operator*</code> ，因而两次使用 new，也就需要两次 delete，但却没有合理的办法让 <code>operator*</code> 使用者进行那些 delete 调用，会导致资源泄露。</p>
+<p>还有一种方法可以避免任何构造函数被调用：让 <code>operator*</code> 返回的 reference 指向一个被定义于函数内部的 static Rational 对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const Rational&amp; operator*(const Rational&amp; lhs, const Rational&amp; rhs) &#123;</span><br><span class="line">    static Rational result;</span><br><span class="line">    result = ...;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当执行这样的表达式 <code>((a * b) == (c * d))</code> ，总是被核算为 true。两次 <code>operator*</code> 调用的确各自改变了 <code>static Rational</code> 对象值，但由于它们返回的都是 reference，因此调用端看到的永远是 <code>static Rational</code> 对象的“现值”。</p>
+<p>当你必须在返回一个 reference 和返回一个 object 之间抉择时，你的工作就是挑出行为正确的那个。就让编译器厂商为“尽可能降低成本”鞠躬尽瘁吧！</p>
+<p>小结：</p>
+<ul>
+<li>绝不要返回 pointer 或 reference 指向一个 local stack 对象，或范湖 reference 指向一个 heap-allocated 对象，或返回 pointer 或 reference 指向一个 local static 对象而有可能同时需要多个这样的对象。</li>
+</ul>
+<h2 id="条款22：将成员变量声明为-private"><a href="#条款22：将成员变量声明为-private" class="headerlink" title="条款22：将成员变量声明为 private"></a>条款22：将成员变量声明为 private</h2><p>首先从语法一致性考虑，如果成员变量不是 <code>public</code> ，客户唯一能够访问对象的办法就是通过成员函数。</p>
+<p>其次使用函数可以让你对成员变量的处理有更精确的控制。如果令成员变量为 <code>public</code> ，每个人都可以读写它，但如果以函数取得或设定其值（getter、setter），就可以实现出“禁止访问”、“只读访问”、“只写访问”、“读写访问”。</p>
+<p>最重要的原因：封装。如果通过函数访问成员变量，日后可修改这个成员变量，而 class 客户一点也不会知道 class 内部实现已经起了变化。</p>
+<p>将成员变量隐藏在函数接口的背后，可以为“所有可能的实现”提供弹性。</p>
+<p>封装的重要性比你最初见到它时还重要。如果你对客户隐藏成员变量，你可以确保 class 的约束条件总是会获得维护，因为只有成员函数可以影响它们。尤有进者，你保留了日后变更实现的权利。如果不隐藏它们，改变任何 <code>public</code> 事物会破坏太多客户码。</p>
+<p>假设有一个 public 成员变量，而我们最终取消了它。多少代码可能会被破坏呢？所有客户代码都会被破坏。因此 public 成员变量完全没有封装性。<br>假设有一个 protected 成员变量，而我们最终取消了它。多少代码可能会被破坏呢？所有使用它的 derived class 都会被破坏。因此 protected 成员变量也缺乏封装性。“语法一致性”和“细微划分之访问控制”等理由显然也适用于 protected 数据。</p>
+<p>从封装的角度观之，其实只有两种访问权限：private（封装） 和其他（不提供封装）。</p>
+<p>小结：</p>
+<ul>
+<li>切记将成员变量声明为 private。这可赋予客户访问数据的一致性、可细微划分访问控制、允诺约束条件获得保证，并提供 class 作者以充分的实现弹性。</li>
+<li>protected 并不比 public 更具封装性。</li>
+</ul>
+<h2 id="条款23：宁以non-member、non-friend-替换-member-函数"><a href="#条款23：宁以non-member、non-friend-替换-member-函数" class="headerlink" title="条款23：宁以non-member、non-friend 替换 member 函数"></a>条款23：宁以non-member、non-friend 替换 member 函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class WebBrowser &#123;</span><br><span class="line">public:</span><br><span class="line">    ...</span><br><span class="line">    void clearCache();</span><br><span class="line">    void clearHistory();</span><br><span class="line">    void removeCookies();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class WebBrowser &#123;</span><br><span class="line">public:</span><br><span class="line">    ...</span><br><span class="line">    void clearEverything();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void clearBrowser(WebBrowser&amp; wb) &#123;</span><br><span class="line">    wb.clearCache();</span><br><span class="line">    wb.clearHistory();</span><br><span class="line">    wb.removeCookies();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果某些东西被封装，它就不再可见。越多的东西被封装，越少人可以看到它，这样就有更大的弹性去改变它，因为我们的改变仅仅直接影响看到改变的那些人事物。</p>
+<p>通过计算能够访问该数据的函数数量，作为一种粗糙的量测。愈多函数可访问它，数据的封装性就愈低。</p>
+<p>条款22说过，成员变量应该是 <code>private</code>，因为如果它们不是，就有无限量的函数可以访问它们，它们也就毫无封装性。能够访问 <code>private</code> 成员变量的函数只有 class 的 <code>member</code> 函数加上 <code>friend</code> 函数而已。如果要在一个 <code>member</code> 函数（它不只可以访问 class 内的 private 数据，也可以取用 private 函数、enums、typedef等等）和一个 <code>non-member</code>、<code>non-friend</code> 函数（它们无法访问上述任何东西）之间做抉择，而且两者提供相同机能，那么，导致较大封装性的是 <code>non-member non-friend</code> 函数，因为它并不增加“能够访问class 内之 private 成分”的函数数量。</p>
+<p>在 C++ 中，比较自然的做法是让 <code>clearBrowser</code> 成为一个 <code>non-member</code> 函数并且位于 <code>WebBrowser</code> 所在的同一个 <code>namespace</code> 内。<br>将所有便利函数放在多个头文件内但隶属同一个命名空间，可以降低编译依赖，但这种切割机能并不适用于 class 成员函数，因为一个 class 必须整体定义，不能被分割为片片段段。<br>同时意味着客户可以轻松扩展这一便利函数，他们需要做的就是添加更多 <code>non-member non-friend</code> 函数到此命名空间。这是 class 无法提供的另一个性质，因为 class 定义式对客户而言是不能扩展的。</p>
+<p>小结：</p>
+<ul>
+<li>宁可拿 non-member non-friend 函数替换 member 函数。这样做可以增加封装性、包裹弹性和机能扩充性。</li>
+</ul>
+<h2 id="条款24：若所有参数皆需类型转换，请为此采用-non-member-函数"><a href="#条款24：若所有参数皆需类型转换，请为此采用-non-member-函数" class="headerlink" title="条款24：若所有参数皆需类型转换，请为此采用 non-member 函数"></a>条款24：若所有参数皆需类型转换，请为此采用 non-member 函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Rational &#123;</span><br><span class="line">public:</span><br><span class="line">    // 构造函数刻意不为explicit，允许隐式类型转换</span><br><span class="line">    Rational(int numrator = 0, int denominator = 1);</span><br><span class="line"></span><br><span class="line">    int numrator() const; // 分子分母的访问函数</span><br><span class="line">    int denominator() const;</span><br><span class="line">private:</span><br><span class="line">    int numrator;</span><br><span class="line">    int denominator;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>实现有理数的乘法 ，先将 <code>operator*</code> 写成 member 函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Rational &#123;</span><br><span class="line">public:</span><br><span class="line">    const Rational* operator*(const Rational&amp; rhs) const;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>两个有理数相乘：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Rational oneHalf(1, 2);</span><br><span class="line">Rational result;</span><br><span class="line">result = oneHalf * 2;     // 没问题</span><br><span class="line">result = 2 * oneHalf;     // 错误！</span><br></pre></td></tr></table></figure></p>
+<p>结论是，只有当参数被列于参数列内，这个参数才是隐式类型转换的合格参与者。地位相当于“被调用的成员函数所隶属的那个对象”——即 this 对象——的那个隐喻参数，绝不是隐式类型转换的合格参与者。第一次调用伴随一个放在参数列内的参数，第二次调用则否。</p>
+<p>让 <code>operator*</code> 成为一个 <code>non-member</code> 函数，便允许编译器在每一个实参身上执行隐式类型转换。</p>
+<p>无论何时如果你可以避免 <code>friend</code> 函数就该避免，因为会带来很多麻烦。当然有时候 <code>friend</code> 有其正当性，但这个事实亦然存在：不能够只因函数不该成为 member ，就自动让它成为 friend。</p>
+<p>小结：</p>
+<ul>
+<li>如果你需要为某个函数的所有参数（包括被 this 指针所指的那个隐喻参数）进行类型转换，那么这个函数必须是个 non-member。</li>
+</ul>
+<h2 id="条款25：考虑写出一个不抛异常的swap-函数"><a href="#条款25：考虑写出一个不抛异常的swap-函数" class="headerlink" title="条款25：考虑写出一个不抛异常的swap 函数"></a>条款25：考虑写出一个不抛异常的swap 函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 缺省实现版</span><br><span class="line">namespace std &#123;</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">    void swap(T&amp; a, T&amp; b) &#123;</span><br><span class="line">        T temp(a);</span><br><span class="line">        a = b;</span><br><span class="line">        b = temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>缺省版本十分平淡，效率不高，其中最主要的就是“以指针指向一个对象，内含真正数据”那种类型。这种设计的常见表现形式是所谓的“pimpl手法”（pimpl 是“pointer to implementation”的缩写）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">class Widget &#123;</span><br><span class="line">public:</span><br><span class="line">    Widget(const Widget&amp; rhs);</span><br><span class="line">    Widget&amp; operator=(const Widget&amp; rhs) &#123;</span><br><span class="line">        ...</span><br><span class="line">        *pImpl = *(rhs.pImpl);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    void swap(Widget&amp; other) &#123;</span><br><span class="line">        using std::swap;</span><br><span class="line">        swap(pImpl, other.pImpl);    // 若要置换Widgets就置换其pImpl指针</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    WidgetImpl* pImpl;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// std::swap 特化版本</span><br><span class="line">namespace std &#123;</span><br><span class="line">    template&lt;&gt;</span><br><span class="line">    void swap&lt;Widget&gt;(Widget&amp; a, Widget&amp; b) &#123;</span><br><span class="line">        a.swap(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// non-member swap 函数</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">void swap(Widget&lt;T&gt;&amp; a, Widget&lt;T&gt;&amp; b) &#123;</span><br><span class="line">    a.swap(b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 对 swap 的调用</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">void doSomething(T&amp; obj1, T&amp; obj2) &#123;</span><br><span class="line">    using std::swap;     // 令 std::swap 在此函数内可用</span><br><span class="line">    ...</span><br><span class="line">    swap(obj1, obj2);    // 为T型对象调用最佳swap版本</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，如果 <code>swap</code> 的缺省实现代码对你的 class 或 class template 提供可接受的效率，你不需要额外做任何事。任何尝试置换那种对象的人都会取得缺省版本，而那将有良好的运作。</p>
+<p>其次，如果 <code>swap</code> 缺省实现版的效率不足（那几乎总是意味你的 class 或 template 使用了某种 pimpl 手法），试着做以下事情：</p>
+<ol>
+<li>提供一个 public swap 成员函数，让它高效地置换你的类型的两个对象值。这个函数绝不该抛出异常。</li>
+<li>在你的 class 或 template 所在的命名空间内提供一个 non-member swap，并令它调用上述 swap 成员函数。</li>
+<li>如果你正在编写一个 class（而非 class template），为你的 class 特化 <code>std::swap</code>。并令它调用你的 swap 成员函数。</li>
+<li>最后，如果你调用 swap，请确定包含一个 using 声明式，以便让 std::swap 在你的函数内曝光可见，然后不加任何 namespace 修饰符，赤裸裸地调用 swap。</li>
+</ol>
+<p>小结：</p>
+<ul>
+<li>当 std::swap 对你的类型效率不高时，提供一个 swap 成员函数，并确定这个函数不抛出异常。</li>
+<li>如果你提供一个 member swap，也该提供一个 non-member swap 用来调用前者。对于 classes 而非 class templates ，也请特化 std::swap。</li>
+<li>调用 swap 时应针对 std::swap 使用 using 声明式，然后调用 swap 并且不带任何“命名空间资格修饰”。</li>
+<li>为“用户定义类型”进行 std templates 全特化是好的，但千万不要尝试在 std 内加入某些对 std 而言全新的东西。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Duxm WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/05/Movie-Quotes/" rel="next" title="Movie Quotes">
+                <i class="fa fa-chevron-left"></i> Movie Quotes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDAwMC8yMDUzNg"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/WechatIMG1.jpg" alt="Duxm">
+            
+              <p class="site-author-name" itemprop="name">Duxm</p>
+              <p class="site-description motion-element" itemprop="description">Duxm | Software Engineer</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tanswer" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:98duxm@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/tanswer" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="skype:live:1124169207?call" target="_blank" title="Skype">
+                      
+                        <i class="fa fa-fw fa-skype"></i>Skype</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/tanswer_" title="CSDN" target="_blank">CSDN</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.xiyoulinux.org/" title="XiyouLinuxGroup" target="_blank">XiyouLinuxGroup</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款18：让接口容易被正确使用，不易被误用"><span class="nav-number">1.</span> <span class="nav-text">条款18：让接口容易被正确使用，不易被误用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款19：设计-class-犹如设计-type"><span class="nav-number">2.</span> <span class="nav-text">条款19：设计 class 犹如设计 type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款20：宁以-pass-by-reference-to-const-替换-pass-by-value"><span class="nav-number">3.</span> <span class="nav-text">条款20：宁以 pass-by-reference-to-const 替换 pass-by-value</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款21：必须返回对象时，别妄想返回其-reference"><span class="nav-number">4.</span> <span class="nav-text">条款21：必须返回对象时，别妄想返回其 reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款22：将成员变量声明为-private"><span class="nav-number">5.</span> <span class="nav-text">条款22：将成员变量声明为 private</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款23：宁以non-member、non-friend-替换-member-函数"><span class="nav-number">6.</span> <span class="nav-text">条款23：宁以non-member、non-friend 替换 member 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款24：若所有参数皆需类型转换，请为此采用-non-member-函数"><span class="nav-number">7.</span> <span class="nav-text">条款24：若所有参数皆需类型转换，请为此采用 non-member 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款25：考虑写出一个不抛异常的swap-函数"><span class="nav-number">8.</span> <span class="nav-text">条款25：考虑写出一个不抛异常的swap 函数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duxm</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
