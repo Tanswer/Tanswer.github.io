@@ -79,18 +79,19 @@
 
 
 
-<meta name="description" content="##条款32：确定你的 public 继承塑模出 is-a 关系 以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受">
+<meta name="description" content="条款32：确定你的 public 继承塑模出 is-a 关系以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="继承与面向对象设计">
 <meta property="og:url" content="https://tanswer.github.io/2019/05/08/继承与面向对象设计/index.html">
 <meta property="og:site_name" content="Duxm&#39;s Blog">
-<meta property="og:description" content="##条款32：确定你的 public 继承塑模出 is-a 关系 以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受">
+<meta property="og:description" content="条款32：确定你的 public 继承塑模出 is-a 关系以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受一个">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g2u6dnf9vij31960cmwgq.jpg">
-<meta property="og:updated_time" content="2019-05-08T12:53:04.154Z">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g2u6pbqt4mj31ao0cg76o.jpg">
+<meta property="og:updated_time" content="2019-05-08T12:56:28.465Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="继承与面向对象设计">
-<meta name="twitter:description" content="##条款32：确定你的 public 继承塑模出 is-a 关系 以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受">
+<meta name="twitter:description" content="条款32：确定你的 public 继承塑模出 is-a 关系以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受一个">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g2u6dnf9vij31960cmwgq.jpg">
 
 
@@ -359,7 +360,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  4.9k
+                  4.8k
                 </span>
               
 
@@ -396,8 +397,7 @@
       
 
       
-        <p>##条款32：确定你的 public 继承塑模出 is-a 关系</p>
-<p>以 C++ 进行面向对象编程，最重要的一个规则是：<code>public</code> 继承意味着 is-a 的关系。 <code>Derived</code> 对象同时也是一个类型为 <code>Base</code> 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。</p>
+        <h2 id="条款32：确定你的-public-继承塑模出-is-a-关系"><a href="#条款32：确定你的-public-继承塑模出-is-a-关系" class="headerlink" title="条款32：确定你的 public 继承塑模出 is-a 关系"></a>条款32：确定你的 public 继承塑模出 is-a 关系</h2><p>以 C++ 进行面向对象编程，最重要的一个规则是：<code>public</code> 继承意味着 is-a 的关系。 <code>Derived</code> 对象同时也是一个类型为 <code>Base</code> 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。</p>
 <p>在 C++ 领域中，任何函数如果期望获得一个类型为 <code>Base class</code> 的实参，都也愿意接受一个 <code>Derived class</code> 的对象。</p>
 <p>正方形是一种矩形，反之则不一定。但是某些可施行于矩形身上的事情（例如宽度可独立于其高度可被外界修改）却不可施行于正方形身上（高度总是应该和宽度一样）。所以 <code>public</code> 继承塑模它们之间的关系并不正确。代码通过编译并不表示就可以正确运作。</p>
 <p>小结：</p>
@@ -524,12 +524,12 @@
 <li><p>和复合不同，private 继承可以造成 empty base 最优化。这对致力于“对象尺寸最小化”的程序库开发者而言，可能很重要。</p>
 </li>
 </ul>
-<h2 id="条款-40：明智而审慎地使用多重继承"><a href="#条款-40：明智而审慎地使用多重继承" class="headerlink" title="条款 40：明智而审慎地使用多重继承"></a>条款 40：明智而审慎地使用多重继承</h2><p>最需要认清的一件事是：当多重继承进入设计景框，程序有可能从一个以上的 base classes 继承相同的名称。那会导致较多的歧义机会。</p>
+<h2 id="条款40：明智而审慎地使用多重继承"><a href="#条款40：明智而审慎地使用多重继承" class="headerlink" title="条款40：明智而审慎地使用多重继承"></a>条款40：明智而审慎地使用多重继承</h2><p>最需要认清的一件事是：当多重继承进入设计景框，程序有可能从一个以上的 base classes 继承相同的名称。那会导致较多的歧义机会。</p>
 <p>多重继承的意思是继承一个以上的 base classes，但这些 base classes 并不常在继承体系中又有更高级别的 base classes，因为那会导致要命的“钻石型多重继承”。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g2u6dnf9vij31960cmwgq.jpg" alt="钻石继承"></p>
 <p>当出现这种情况时，有两种方案：假设 <code>File class</code> 有个成员变量 <code>filename</code> ，那么 <code>IOFile</code> 内该有多少笔这个名称的数据呢？如果它从每个基类继承一份，那么其对象内应该有两份 <code>filename</code> 成员变量。但从另一个角度看，<code>IOFile</code> 对象只应该有一个文件名称。</p>
 <p>C++ 对两个方案都支持，其缺省做法是执行复制。如果不是你想要的，就必须令那个带有数据的 class 成为一个 <code>virtual base class</code>，必须令所有继承它的 classes 采用“virtual 继承”。</p>
-<p>!(虚继承)[<a href="https://ws4.sinaimg.cn/large/006tNc79ly1g2u6pbqt4mj31ao0cg76o.jpg]" target="_blank" rel="noopener">https://ws4.sinaimg.cn/large/006tNc79ly1g2u6pbqt4mj31ao0cg76o.jpg]</a></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g2u6pbqt4mj31ao0cg76o.jpg" alt="虚继承"></p>
 <p>如果让 public 继承总是 <code>virtual</code>，不就万事大吉了吗？使用虚继承得付出代价。</p>
 <p>为了避免继承得来的成员重复，编译器必须做许多幕后工作，而其后果是：使用 virtual 继承的那些 classes 所产生的对象往往比使用 non-virtual 继承的兄弟们体积大，访问 <code>virtual base classes</code> 的成员变量时，也比访问 <code>non-virtual base classes</code> 的成员变量更慢。</p>
 <p>另外， <code>virtual base</code> 的初始化责任是由继承体系中的最底层（`most derived class）负责。</p>
@@ -789,7 +789,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款33：避免遮掩继承而来的名称"><span class="nav-number">1.</span> <span class="nav-text">条款33：避免遮掩继承而来的名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款34：区分接口继承和实现继承"><span class="nav-number">2.</span> <span class="nav-text">条款34：区分接口继承和实现继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款35：考虑virtual函数以外的其他选择"><span class="nav-number">3.</span> <span class="nav-text">条款35：考虑virtual函数以外的其他选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-Non-Virtual-Interface-手法实现-Template-Method-模式："><span class="nav-number">3.1.</span> <span class="nav-text">藉由 Non-Virtual Interface 手法实现 Template Method 模式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-Function-Pointers-实现-Strategy-模式"><span class="nav-number">3.2.</span> <span class="nav-text">藉由 Function Pointers 实现 Strategy 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-function-完成-Strategy-模式"><span class="nav-number">3.3.</span> <span class="nav-text">藉由 function 完成 Strategy 模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款36：绝不重新定义继承来的-non-virtual-函数"><span class="nav-number">4.</span> <span class="nav-text">条款36：绝不重新定义继承来的 non-virtual 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款37：绝不重新定义继承而来的缺省参数值"><span class="nav-number">5.</span> <span class="nav-text">条款37：绝不重新定义继承而来的缺省参数值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款38：通过复合塑模出-has-a-或“根据某物实现出”"><span class="nav-number">6.</span> <span class="nav-text">条款38：通过复合塑模出 has-a 或“根据某物实现出”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款39：明智而审慎地使用-private-继承"><span class="nav-number">7.</span> <span class="nav-text">条款39：明智而审慎地使用 private 继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款-40：明智而审慎地使用多重继承"><span class="nav-number">8.</span> <span class="nav-text">条款 40：明智而审慎地使用多重继承</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款32：确定你的-public-继承塑模出-is-a-关系"><span class="nav-number">1.</span> <span class="nav-text">条款32：确定你的 public 继承塑模出 is-a 关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款33：避免遮掩继承而来的名称"><span class="nav-number">2.</span> <span class="nav-text">条款33：避免遮掩继承而来的名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款34：区分接口继承和实现继承"><span class="nav-number">3.</span> <span class="nav-text">条款34：区分接口继承和实现继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款35：考虑virtual函数以外的其他选择"><span class="nav-number">4.</span> <span class="nav-text">条款35：考虑virtual函数以外的其他选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-Non-Virtual-Interface-手法实现-Template-Method-模式："><span class="nav-number">4.1.</span> <span class="nav-text">藉由 Non-Virtual Interface 手法实现 Template Method 模式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-Function-Pointers-实现-Strategy-模式"><span class="nav-number">4.2.</span> <span class="nav-text">藉由 Function Pointers 实现 Strategy 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-function-完成-Strategy-模式"><span class="nav-number">4.3.</span> <span class="nav-text">藉由 function 完成 Strategy 模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款36：绝不重新定义继承来的-non-virtual-函数"><span class="nav-number">5.</span> <span class="nav-text">条款36：绝不重新定义继承来的 non-virtual 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款37：绝不重新定义继承而来的缺省参数值"><span class="nav-number">6.</span> <span class="nav-text">条款37：绝不重新定义继承而来的缺省参数值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款38：通过复合塑模出-has-a-或“根据某物实现出”"><span class="nav-number">7.</span> <span class="nav-text">条款38：通过复合塑模出 has-a 或“根据某物实现出”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款39：明智而审慎地使用-private-继承"><span class="nav-number">8.</span> <span class="nav-text">条款39：明智而审慎地使用 private 继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款40：明智而审慎地使用多重继承"><span class="nav-number">9.</span> <span class="nav-text">条款40：明智而审慎地使用多重继承</span></a></li></ol></div>
             
 
           </div>
