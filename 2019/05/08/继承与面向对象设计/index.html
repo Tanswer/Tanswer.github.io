@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="##条款32：确定你的 public 继承塑模出 is-a 关系 以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受">
+<meta property="og:type" content="article">
+<meta property="og:title" content="继承与面向对象设计">
+<meta property="og:url" content="https://tanswer.github.io/2019/05/08/继承与面向对象设计/index.html">
+<meta property="og:site_name" content="Duxm&#39;s Blog">
+<meta property="og:description" content="##条款32：确定你的 public 继承塑模出 is-a 关系 以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g2u6dnf9vij31960cmwgq.jpg">
+<meta property="og:updated_time" content="2019-05-08T12:53:04.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="继承与面向对象设计">
+<meta name="twitter:description" content="##条款32：确定你的 public 继承塑模出 is-a 关系 以 C++ 进行面向对象编程，最重要的一个规则是：public 继承意味着 is-a 的关系。 Derived 对象同时也是一个类型为 Base 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。 在 C++ 领域中，任何函数如果期望获得一个类型为 Base class 的实参，都也愿意接受">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g2u6dnf9vij31960cmwgq.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tanswer.github.io/2019/05/08/继承与面向对象设计/">
+
+
+
+
+
+  <title>继承与面向对象设计 | Duxm's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Duxm's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tanswer.github.io/2019/05/08/继承与面向对象设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Duxm">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/WechatIMG1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Duxm's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">继承与面向对象设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-08T20:52:10+08:00">
+                2019-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  4.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  18
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##条款32：确定你的 public 继承塑模出 is-a 关系</p>
+<p>以 C++ 进行面向对象编程，最重要的一个规则是：<code>public</code> 继承意味着 is-a 的关系。 <code>Derived</code> 对象同时也是一个类型为 <code>Base</code> 的对象，反之不成立。B 比 D 表现出更一般化的概念，而 D 比 B 表现出更特殊化的概念。</p>
+<p>在 C++ 领域中，任何函数如果期望获得一个类型为 <code>Base class</code> 的实参，都也愿意接受一个 <code>Derived class</code> 的对象。</p>
+<p>正方形是一种矩形，反之则不一定。但是某些可施行于矩形身上的事情（例如宽度可独立于其高度可被外界修改）却不可施行于正方形身上（高度总是应该和宽度一样）。所以 <code>public</code> 继承塑模它们之间的关系并不正确。代码通过编译并不表示就可以正确运作。</p>
+<p>小结：</p>
+<ul>
+<li><code>public</code> 继承意味着 is-a。适用于 base classes 身上的每一件事情一定也适用于 derived classes 身上，因为每一个 derived class 对象也都是一个 base class 对象。</li>
+</ul>
+<h2 id="条款33：避免遮掩继承而来的名称"><a href="#条款33：避免遮掩继承而来的名称" class="headerlink" title="条款33：避免遮掩继承而来的名称"></a>条款33：避免遮掩继承而来的名称</h2><p>我们知道，内层作用域的名称会遮掩外围作用域的名称。</p>
+<p><code>derived class</code> 作用域被嵌套在 <code>base class</code> 作用域内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Base &#123;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    int x;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void mf1() = 0;</span><br><span class="line"></span><br><span class="line">    virtual void mf1(int);</span><br><span class="line"></span><br><span class="line">    virtual void mf2();</span><br><span class="line"></span><br><span class="line">    void mf3();</span><br><span class="line"></span><br><span class="line">    void mf3(double);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Derived : public Base &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void mf1();</span><br><span class="line"></span><br><span class="line">    void mf3();</span><br><span class="line"></span><br><span class="line">    void mf4();</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Derived d;</span><br><span class="line"></span><br><span class="line">int x;</span><br><span class="line"></span><br><span class="line">d.mf1(); // 没问题 call Derived::mf1</span><br><span class="line"></span><br><span class="line">d.mf1(x); // 错误！因为 Derived::mf1 遮蔽了Base::mf1</span><br><span class="line"></span><br><span class="line">d.mf2(); // 没问题 call Base::mf2</span><br><span class="line"></span><br><span class="line">d.mf3(); // 没问题 call Derived::mf3</span><br><span class="line"></span><br><span class="line">d.mf3(x); // 错误！因为 Derived::mf3 遮蔽了Base::mf3</span><br></pre></td></tr></table></figure>
+<p>is-a 是 public 继承的基石，实际上如果你正在使用 public 继承而又不继承那些重载函数，就是违反 base 和 derived classes 之间的 is-a 关系。</p>
+<p>使用 <code>using</code> 声明式可以推翻（override）C++ 对“继承而来的名称”的缺省遮掩行为。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Derived : public Base &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    using Base::mf1; // 让Base class 内名为 mf1 和 mf3 的所有东西</span><br><span class="line"></span><br><span class="line">    using Base::mf3; // 在 derived 作用域内都可见</span><br><span class="line"></span><br><span class="line">    virtual void mf1();</span><br><span class="line"></span><br><span class="line">    void mf3();</span><br><span class="line"></span><br><span class="line">    void mf4();</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这次上面失败的调用就没问题了。这意味着如果你继承 base class 并加上重载函数，而你又希望重新定义或覆写其中一部分，那么你必须为那些原本会被遮掩的每个名称引入一个 <code>using</code> 声明式，否则某些你希望继承的名称会被遮掩。</p>
+<p>小结：</p>
+<ul>
+<li><p>derived class 内的名称会遮掩 base class 内的名称，在 public 继承下从来没有人希望如此。</p>
+</li>
+<li><p>为了让被遮蔽的名称再见天日，可使用 using 声明式或转交函数（forwarding functions）。</p>
+</li>
+</ul>
+<h2 id="条款34：区分接口继承和实现继承"><a href="#条款34：区分接口继承和实现继承" class="headerlink" title="条款34：区分接口继承和实现继承"></a>条款34：区分接口继承和实现继承</h2><p>身为 class 的设计者，有时候你会希望 <code>derived class</code> 只继承成员函数的接口（也就是声明）；有时候你又会希望 <code>derived class</code> 同时继承函数的接口和实现，但又希望能够覆写它们所继承的实现；有时候你希望 <code>derived class</code> 同时继承接口和实现 ，并且不允许覆写任何东西。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Shape &#123;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    virtual void draw() const = 0;  // 纯虚函数使它成为一个抽象 class</span><br><span class="line"></span><br><span class="line">    virtual void error(const std::string&amp; msg);</span><br><span class="line"></span><br><span class="line">    int objectId() const;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Rectange : public Shape &#123; ... &#125;;</span><br><span class="line"></span><br><span class="line">class Ellipse : public Shape &#123; ... &#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>成员函数的接口总是会被继承。public 继承意味着 is-a，如果某个函数可作用于 base class 身上，一定可施行于其 derived class 身上。</p>
+</li>
+<li><p>声明一个 <code>pure virtual</code> 函数的目的是为了让 <code>derived class</code> 只继承函数接口。<code>pure virtual</code> 函数的两个最突出特性：它们必须被任何继承了它们的具象类重新声明，而且它们在抽象类中通常没有定义。其实可以为 <code>pure virtual</code> 函数提供定义，但调用它的唯一途径是“调用时明确指出其class名称”。</p>
+</li>
+<li><p><code>impure virtual</code> 函数的目的，是让 <code>derived class</code> 继承该函数的接口和缺省实现。<code>imoure virtual</code> 函数会提供一份实现 代码，<code>derived class</code> 可能覆写（override）它。</p>
+</li>
+<li><p>声明 <code>non-virtual</code> 函数的目的，是令 <code>derived class</code> 继承函数的接口及一份强制性实现。<code>non-virtual</code> 函数意味着它并不打算在 derived class 中有不同的行为。</p>
+</li>
+</ul>
+<p>简单总结一下就是：</p>
+<ul>
+<li><p><code>pure virtual</code> ：你必须提供一个 <code>draw</code> 函数，但我不干涉你怎么实现它。</p>
+</li>
+<li><p><code>impure virtual</code>：你必须支持一个 <code>error</code> 函数，但如果你不想自己写一个，可以使用 <code>Shape class</code> 提供的缺省版本。</p>
+</li>
+<li><p><code>non-virtual</code> ：每个 Shape 对象都有一个用来产生对象识别码的函数；该方法由 <code>Shape::objectID</code> 的定义式决定，任何 <code>derived class</code> 都不应该尝试改变其行为。</p>
+</li>
+</ul>
+<p>这些不同类型的声明意味着根本意义并不相同的事情，当你声明你的成员函数时，必须谨慎选择。如果你确实履行，应该能够避免经验不足的 class 设计者最常犯的两个错误：</p>
+<ol>
+<li>将所有函数声明为 <code>non-virtual</code>。这使得 <code>derived class</code> 没有余裕空间进行特化工作。<code>non-virtual</code> 析构函数尤其会带来问题。</li>
+<li>将所有成员函数都声明为 <code>virtual</code> 。某些函数就是不应该在 <code>derived class</code>  中被重新定义，如果你的不变性凌驾特异性，别害怕说出来。</li>
+</ol>
+<p>小结：</p>
+<ul>
+<li>接口继承和实现继承不同。在 public 继承之下，derived class 总是继承 base class 的接口。</li>
+<li>pure virtual 函数只具体指定接口继承。</li>
+<li>impure virtual 函数具体执行接口继承及缺省实现继承。</li>
+<li>non-virtual 函数具体指定接口继承以及强制性实现继承。</li>
+</ul>
+<h2 id="条款35：考虑virtual函数以外的其他选择"><a href="#条款35：考虑virtual函数以外的其他选择" class="headerlink" title="条款35：考虑virtual函数以外的其他选择"></a>条款35：考虑virtual函数以外的其他选择</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class GameCharacter &#123;</span><br><span class="line">public:</span><br><span class="line">    virtual int healthValue() const;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="藉由-Non-Virtual-Interface-手法实现-Template-Method-模式："><a href="#藉由-Non-Virtual-Interface-手法实现-Template-Method-模式：" class="headerlink" title="藉由 Non-Virtual Interface 手法实现 Template Method 模式："></a>藉由 Non-Virtual Interface 手法实现 Template Method 模式：</h3><p>这个流派建议，较好的设计是保留 healthValue 为 public 成员函数，但让他成为 non-virtual，并调用一个 private  virtual 函数进行实际工作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class GameCharacter &#123;</span><br><span class="line">public:</span><br><span class="line">    int healthValue() const &#123;</span><br><span class="line">        ...      // 做一些事前工作</span><br><span class="line">        int retVal = doHealthValue(); // 做真正的工作</span><br><span class="line">        ...     // 做一些事后工作</span><br><span class="line">        return retVal;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    virtual int doHealthValue() const &#123; // derived class可重新定义它</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>NVI 手法的一个优点隐身在上述代码注释“做一些事前工作”和“做一些事后工作”之中。<br>在 NVI 手法下其实没有必要让 <code>virtual</code> 函数一定得是 <code>private</code> 。</p>
+<h3 id="藉由-Function-Pointers-实现-Strategy-模式"><a href="#藉由-Function-Pointers-实现-Strategy-模式" class="headerlink" title="藉由 Function Pointers 实现 Strategy 模式"></a>藉由 Function Pointers 实现 Strategy 模式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class GameCharacter; // 前置声明</span><br><span class="line">// 以下函数是计算健康指数的缺省算法</span><br><span class="line">int defaultHealthCalc(const GameCharacter&amp; gc);</span><br><span class="line">class GameCharacter &#123;</span><br><span class="line">public:</span><br><span class="line">    typedef int (*HealthCalcFunc) (const GameCharacter&amp;);</span><br><span class="line">    explicit GameCharacter(HealthCalcFunc hcf = defaultHealthCalc)</span><br><span class="line">           : healthFunc(hcf)</span><br><span class="line">    &#123;&#125;</span><br><span class="line">    int healthValue() const &#123;</span><br><span class="line">        return healFunc(*this);</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    HealthCalcFunc healthFunc;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个做法是常见的 Strategy 设计模式的简单应用。拿它和“植基于 GameCharacter 继承体系内之virtual函数”的做法比较，它提供了某些有趣弹性：</p>
+<ul>
+<li>同一人物类型之不同实体可以有不同的健康计算函数。</li>
+<li>某已知人物之健康指数计算函数可在运行期变更。例如 <code>GameCharacter</code> 可提供一个成员函数 <code>setHealthCalculator</code> ，用来替换当前的健康指数计算函数。</li>
+</ul>
+<p>但是这样可能必须降低类的封装性。</p>
+<h3 id="藉由-function-完成-Strategy-模式"><a href="#藉由-function-完成-Strategy-模式" class="headerlink" title="藉由 function 完成 Strategy 模式"></a>藉由 function 完成 Strategy 模式</h3><p>使用 <code>std::function</code> 替换函数指针。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class GameCharacter; // 前置声明</span><br><span class="line">// 以下函数是计算健康指数的缺省算法</span><br><span class="line">int defaultHealthCalc(const GameCharacter&amp; gc);</span><br><span class="line">class GameCharacter &#123;</span><br><span class="line">public:</span><br><span class="line">    typedef std::function&lt;int  (const GameCharacter&amp;)&gt; HealthCalcFunc;</span><br><span class="line">    explicit GameCharacter(HealthCalcFunc hcf = defaultHealthCalc)</span><br><span class="line">           : healthFunc(hcf)</span><br><span class="line">    &#123;&#125;</span><br><span class="line">    int healthValue() const &#123;</span><br><span class="line">        return healFunc(*this);</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    HealthCalcFunc healthFunc;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>std::function&lt;int  (const GameCharacter&amp;)&gt;</code><br>这个签名代表的函数是“接受一个 reference 指向 const GameCharacter，并返回 int”。这个类型产生的对象可以持有任何与此签名式兼容的可调用物。所谓兼容，意思是这个可调用物的参数可被隐式转换为 <code>const GameCharacter&amp;</code>，而其返回类型可转换为 int。</p>
+<p>这样的话，在“指定健康计算函数”这件事上有更惊人的弹性。比如可以使用某个返回值 <code>non-int</code> 的函数、或者某个函数对象、或者某个成员函数计算健康指数。</p>
+<p>小结：</p>
+<ul>
+<li>使用 non-virtual interface NVI 手法，那是 Template Method 设计模式的一种特殊形式。它以 public non-virtual 成员函数包裹低访问性（protected、private）的 virtual 函数。</li>
+<li>将 virtual 函数替换为“函数指针成员变量”，那是 Strategy 设计模式的一种分解表现形式。</li>
+<li>以 std::function 成员变量替换 virtual 函数，因而允许使用任何可调用物搭配一个兼容于需求的签名式。这也是 Strategy 设计模式的某种形式。</li>
+<li>将继承体系内的 virtual 函数替换为另一个继承体系内的 virtual 函数。这是 Strategy 设计模式的传统实现手法。</li>
+</ul>
+<h2 id="条款36：绝不重新定义继承来的-non-virtual-函数"><a href="#条款36：绝不重新定义继承来的-non-virtual-函数" class="headerlink" title="条款36：绝不重新定义继承来的 non-virtual 函数"></a>条款36：绝不重新定义继承来的 non-virtual 函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Base &#123;</span><br><span class="line">public:</span><br><span class="line">    void mf();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">class Derived : public Base &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>non-virtual</code> 函数如 <code>Base::mf</code> 和 <code>Derived::mf</code> 都是静态绑定。如果 pB 被声明为一个 <code>pointer-to-Base</code>，那么通过 pB 调用的 <code>non-virtual</code> 函数永远都是 Base 定义的版本，即使 pB 指向一个类型为“Base派生的class”的对象。</p>
+<p>另一方面，<code>virtual</code> 函数却是动态绑定，如果 mf 是个 <code>virtual</code> 函数，不论是通过 pB 或 pD 调用 mf，都会导致调用 <code>Derived::mf</code>，因为 pB 和 pD 真正指的都是一个类型为 Derived 的对象。</p>
+<p>如果 Derived 重新定义 mf，你的设计便出现矛盾。</p>
+<p>请记住：</p>
+<ul>
+<li>绝对不要重新定义一个继承来的 non-virtual 函数。</li>
+</ul>
+<h2 id="条款37：绝不重新定义继承而来的缺省参数值"><a href="#条款37：绝不重新定义继承而来的缺省参数值" class="headerlink" title="条款37：绝不重新定义继承而来的缺省参数值"></a>条款37：绝不重新定义继承而来的缺省参数值</h2><p>本条款的讨论局限于“继承一个带有缺省参数值的 virtual 函数” 。这种情况下，本条款成立的理由就非常直接而明确了：virtual 函数系动态绑定，而缺省参数却是静态绑定。意思是你可能会在“调用一个定义于 <code>derived class</code> 内的 virtual 函数”的同时，却使用 <code>base class</code> 为它所指定的缺省参数值。</p>
+<p>virtual 函数系动态绑定，静态绑定和动态绑定之间的差异？？？<br>对象的静态模型，就是它在程序中被声明时所采用的类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Shape &#123;</span><br><span class="line">public:</span><br><span class="line">    enum ShapeColor &#123; Red, Green, Blue &#125;;</span><br><span class="line">    virtual void draw(ShapeColor color = Red) const = 0;</span><br><span class="line">&#125;;</span><br><span class="line">class Rectangle : public Shape &#123;</span><br><span class="line">    virtual void draw(ShapeColor color = Green) const;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Shape* ps;</span><br><span class="line">Shape* pc = new Circle;</span><br><span class="line">Shape* pr = new Rectangle;</span><br></pre></td></tr></table></figure></p>
+<p>本例中 ps、pc、pr 都被声明为 <code>pointer-to-Shape</code> 类型，不论它们真正指向什么，它们的静态类型都是 <code>Shape*</code>。</p>
+<p>对象的所谓动态类型则是指“目前所指对象的类型”。也就是说，动态类型可以表现出一个对象将会有什么行为。以上例而言，pc 的动态类型是 <code>Circle*</code>，pr 的动态类型是 <code>Rectangle*</code>，ps 没有动态类型，因为它尚未指向任何对象。</p>
+<p><code>virtual</code> 函数系动态绑定而来，意思是调用一个 virtual 函数时，究竟调用哪一份函数实现代码，取决于发出调用的那个对象的动态类型。</p>
+<p><code>pr-&gt;draw();     // 调用 Rectangle::draw(Shape::Red)!</code><br><code>virtual</code> 函数系动态绑定，而缺省参数却是静态绑定。如果重新定义了缺省参数值的话，比如 <code>Rectangle::draw</code> 函数的缺省参数值是 <code>GREEN</code>，由于 pr 的静态类型是 <code>Shape*</code> ，所以此调用的缺省参数值来自 <code>Shape class</code> 而非 <code>Rectangle class</code> ！结局是这个函数调用有着奇怪并且几乎绝对没人预料得到的组合，由<code>Shape class</code> 和 <code>Rectangle class</code> 的 <code>draw</code> 声明式各出一半力。</p>
+<p>为什么C++采用这种运作方式呢？答案在于运行期效率。如果缺省参数值是动态绑定，编译器就必须有某种办法在运行期为 <code>virtual</code> 函数决定适当的参数缺省值。这比目前实行的“在编译器决定”的机制更慢而且更复杂。</p>
+<p>当你想令 <code>virtual</code> 函数表现出你所想要的行为但却遭遇麻烦，聪明的做法是考虑替代设计。如条款35所列的方案设计，其中之一是 NVI，令 <code>base class</code> 内的一个 <code>non-virtual public</code> 函数调用 <code>private virtual</code> 函数，后者可被 <code>derived class</code> 重新定义。这里让 <code>non-virtual</code> 函数指定缺省参数值，而 <code>private virtual</code> 函数负责真正的工作。这样 <code>derived class</code> 绝对不会覆写 <code>non-virtual</code> 函数，缺省参数值就不会被改变。</p>
+<p>请记住：</p>
+<ul>
+<li>绝对不要重新定义一个继承而来的缺省参数值。因为缺省参数值都是静态绑定，而 virtual 函数——你唯一应该覆写的东西——却是动态绑定。</li>
+</ul>
+<h2 id="条款38：通过复合塑模出-has-a-或“根据某物实现出”"><a href="#条款38：通过复合塑模出-has-a-或“根据某物实现出”" class="headerlink" title="条款38：通过复合塑模出 has-a 或“根据某物实现出”"></a>条款38：通过复合塑模出 has-a 或“根据某物实现出”</h2><p>复合是类型之间的一种关系，当某种类型的对象内含其他类型的对象，便是这种关系。复合意味 has-a（有一个） 或 is-implemented-in-terms-of（根据某物实现出）。</p>
+<p>那是因为你正打算在你的软件世界中处理两个不同的领域。程序中的对象其实相当于你所塑造的世界中的事物，例如人、汽车等。这样的对象属于应用域部分。其他对象则纯碎是实现细节上的人工制品，像是缓冲区、互斥器、查找树等。这些对象相当于你的软件实现域。当复合发生于应用域内的对象之间，表现出 has-a 关系；当它发生于实现域内则是表现 is-implemented-in-terms-of 关系。</p>
+<p>stl 容器比如 <code>set</code>、<code>map</code>等底层实现基本都是通过 has-a 这种关系。</p>
+<p>请记住：</p>
+<ul>
+<li><p>复合（composition）的意义和 public 继承完全不同。</p>
+</li>
+<li><p>在应用域，复合意味着 has-a（有一个）。在实现域，复合意味着 is-implemented-in-terms-of（根据某物实现出）。</p>
+</li>
+</ul>
+<h2 id="条款39：明智而审慎地使用-private-继承"><a href="#条款39：明智而审慎地使用-private-继承" class="headerlink" title="条款39：明智而审慎地使用 private 继承"></a>条款39：明智而审慎地使用 private 继承</h2><p><code>private</code> 继承的行为如何呢？</p>
+<p>如果 classes 之间的继承关系是 <code>private</code> ，编译器不会自动将一个 <code>derived class</code> 对象转换为一个 <code>base class</code> 对象。</p>
+<p>由 <code>private base class</code> 继承而来的所有成员，在 <code>derived class</code> 中都会变成 <code>private</code> 属性，纵使它们在 <code>base class</code> 中原本不是 <code>private</code> 属性。</p>
+<p><code>private</code> 继承意味着什么呢？</p>
+<p><code>Private</code> 继承意味着 <code>implemented-in-terms-of</code>（根据某物实现出）。如果你让 <code>class D</code> 以 <code>private</code> 方式继承 <code>class B</code>，你的用意是为了采用 class B 内已经备妥的某些特性，不是因为 B 对象和 D 对象存在有任何观念上的关系。</p>
+<p><code>private</code> 继承纯粹只是一种实现技术，<code>private</code> 继承意味只有实现部分被继承，接口部分应略去。<code>private</code> 继承在软件“设计”层面上没有意义，其意义只及于软件实现层面。</p>
+<p>这好像看着和复合的意义很相似。那如何在两者之间取舍？</p>
+<p>答案很简单：尽可能使用复合，必要时才使用 private 继承。何时才是必要？主要是当 <code>protected</code>  成员或 <code>virtual</code> 函数牵扯进来的时候。</p>
+<p>这个例子修改 Widget，让它记录每个成员函数的被调用次数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Timer &#123;</span><br><span class="line"></span><br><span class="line">    explicit Timer(int tickFrequency);</span><br><span class="line"></span><br><span class="line">    virtual void onTick() const; // 定时器每嘀嗒一次 此函数被自动调用一次</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Widget : private Timer &#123;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    virtual void onTick() const; // 查看Widget的数据...等等</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以以复合取而代之：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Widget &#123;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line"></span><br><span class="line">    class WidgetTimer : public Timer &#123;</span><br><span class="line"></span><br><span class="line">    public:</span><br><span class="line"></span><br><span class="line">        virtual void onTick() const;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    WidgetTimer timer;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>为什么更愿意或说应该选择这样的 public 继承加复合，而不是选择原先的 private 继承设计。</p>
+<p>首先，如果想设计 <code>Widget</code> 使它得以拥有 <code>derived class</code> ，但同时你可能会想阻止 <code>derived class</code> 重新定义 <code>onTick</code>。如果 <code>Widget</code> 继承自 <code>Timer</code>，上面的想法就不可能实现，即使是 private 继承也不可能。但如果 <code>WidgetTimer</code> 是 <code>Widget</code> 内部的一个 private 成员并继承 <code>Timer</code>，<code>Widget</code> 的 <code>derived class</code> 将无法取用 <code>WidgetTimer</code> ，因此无法继承它或者重新定义它的virtual函数。Java 的 <code>final</code> 和 C# 的 <code>sealed</code>，拥有“阻止 derived class 重新定义 virtual 函数”的能力。</p>
+<p>第二，将 <code>Widget</code> 的编译依存性降至最低。</p>
+<p>请记住：</p>
+<ul>
+<li><p>private 继承意味着 is-implemented-in-terms-of（根据某物实现出）。它通常比复合的级别低。但是当 derived class 需要访问 protected base class 的成员，或需要重新定义继承而来的 virtual 函数时，这么设计是合理的。</p>
+</li>
+<li><p>和复合不同，private 继承可以造成 empty base 最优化。这对致力于“对象尺寸最小化”的程序库开发者而言，可能很重要。</p>
+</li>
+</ul>
+<h2 id="条款-40：明智而审慎地使用多重继承"><a href="#条款-40：明智而审慎地使用多重继承" class="headerlink" title="条款 40：明智而审慎地使用多重继承"></a>条款 40：明智而审慎地使用多重继承</h2><p>最需要认清的一件事是：当多重继承进入设计景框，程序有可能从一个以上的 base classes 继承相同的名称。那会导致较多的歧义机会。</p>
+<p>多重继承的意思是继承一个以上的 base classes，但这些 base classes 并不常在继承体系中又有更高级别的 base classes，因为那会导致要命的“钻石型多重继承”。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g2u6dnf9vij31960cmwgq.jpg" alt="钻石继承"></p>
+<p>当出现这种情况时，有两种方案：假设 <code>File class</code> 有个成员变量 <code>filename</code> ，那么 <code>IOFile</code> 内该有多少笔这个名称的数据呢？如果它从每个基类继承一份，那么其对象内应该有两份 <code>filename</code> 成员变量。但从另一个角度看，<code>IOFile</code> 对象只应该有一个文件名称。</p>
+<p>C++ 对两个方案都支持，其缺省做法是执行复制。如果不是你想要的，就必须令那个带有数据的 class 成为一个 <code>virtual base class</code>，必须令所有继承它的 classes 采用“virtual 继承”。</p>
+<p>!(虚继承)[<a href="https://ws4.sinaimg.cn/large/006tNc79ly1g2u6pbqt4mj31ao0cg76o.jpg]" target="_blank" rel="noopener">https://ws4.sinaimg.cn/large/006tNc79ly1g2u6pbqt4mj31ao0cg76o.jpg]</a></p>
+<p>如果让 public 继承总是 <code>virtual</code>，不就万事大吉了吗？使用虚继承得付出代价。</p>
+<p>为了避免继承得来的成员重复，编译器必须做许多幕后工作，而其后果是：使用 virtual 继承的那些 classes 所产生的对象往往比使用 non-virtual 继承的兄弟们体积大，访问 <code>virtual base classes</code> 的成员变量时，也比访问 <code>non-virtual base classes</code> 的成员变量更慢。</p>
+<p>另外， <code>virtual base</code> 的初始化责任是由继承体系中的最底层（`most derived class）负责。</p>
+<p>第一，非必要不使用 <code>virtual base classes</code>，平时请使用 non-virtual 继承。</p>
+<p>第二，如果你必须使用 <code>virtual base classes</code>，尽可能避免在其中放置数据。这么一来你就不需担心这些 class 身上的初始化和赋值所带来的诡异事情了。</p>
+<p>请记住：</p>
+<ul>
+<li><p>多重继承比单一继承复杂。它可能导致新的歧义性，以及对 virtual 继承的需要。</p>
+</li>
+<li><p>virtual 继承会增加大小、速度、初始化及赋值复杂度等等成本。如果 virtual base classes 不带任何数据，将是最具有实用价值的情况。</p>
+</li>
+<li><p>多重继承的确有正当用途。其中一个情节涉及“public 继承某个 Interface class” 和 “private 继承某个协助实现的 class”的两相组合。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Duxm WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/07/实现/" rel="next" title="实现">
+                <i class="fa fa-chevron-left"></i> 实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NDAwMC8yMDUzNg"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/WechatIMG1.jpg" alt="Duxm">
+            
+              <p class="site-author-name" itemprop="name">Duxm</p>
+              <p class="site-description motion-element" itemprop="description">Duxm | Software Engineer</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Tanswer" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:98duxm@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/tanswer" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="skype:live:1124169207?call" target="_blank" title="Skype">
+                      
+                        <i class="fa fa-fw fa-skype"></i>Skype</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/tanswer_" title="CSDN" target="_blank">CSDN</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.xiyoulinux.org/" title="XiyouLinuxGroup" target="_blank">XiyouLinuxGroup</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#条款33：避免遮掩继承而来的名称"><span class="nav-number">1.</span> <span class="nav-text">条款33：避免遮掩继承而来的名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款34：区分接口继承和实现继承"><span class="nav-number">2.</span> <span class="nav-text">条款34：区分接口继承和实现继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款35：考虑virtual函数以外的其他选择"><span class="nav-number">3.</span> <span class="nav-text">条款35：考虑virtual函数以外的其他选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-Non-Virtual-Interface-手法实现-Template-Method-模式："><span class="nav-number">3.1.</span> <span class="nav-text">藉由 Non-Virtual Interface 手法实现 Template Method 模式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-Function-Pointers-实现-Strategy-模式"><span class="nav-number">3.2.</span> <span class="nav-text">藉由 Function Pointers 实现 Strategy 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-function-完成-Strategy-模式"><span class="nav-number">3.3.</span> <span class="nav-text">藉由 function 完成 Strategy 模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款36：绝不重新定义继承来的-non-virtual-函数"><span class="nav-number">4.</span> <span class="nav-text">条款36：绝不重新定义继承来的 non-virtual 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款37：绝不重新定义继承而来的缺省参数值"><span class="nav-number">5.</span> <span class="nav-text">条款37：绝不重新定义继承而来的缺省参数值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款38：通过复合塑模出-has-a-或“根据某物实现出”"><span class="nav-number">6.</span> <span class="nav-text">条款38：通过复合塑模出 has-a 或“根据某物实现出”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款39：明智而审慎地使用-private-继承"><span class="nav-number">7.</span> <span class="nav-text">条款39：明智而审慎地使用 private 继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条款-40：明智而审慎地使用多重继承"><span class="nav-number">8.</span> <span class="nav-text">条款 40：明智而审慎地使用多重继承</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Duxm</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
